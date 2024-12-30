@@ -23,7 +23,9 @@ const useInputConverter = () => {
                 datatype: value.metadata.datatype,
                 defaultValue: value.metadata.defaultValue,
                 children: convert(value.fields, currentPath),
-                isFieldEdit: (value as any).metadata.isFieldEdit
+                isFieldEdit: (value as any).metadata.isFieldEdit,
+                isDefaultValueEdit: (value as any).metadata.isDefaultValueEdit,
+                isFieldFocused: (value as any).metadata.isFieldFocused,
             };
         });
 

@@ -14,7 +14,8 @@
     "flat": "^6.0.1",
     "immer": "^10.1.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

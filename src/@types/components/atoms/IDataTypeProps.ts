@@ -23,5 +23,7 @@ export interface IDataTypeProps extends PropsWithChildren {
     datatype: string;
     fPath: string;
     hide?: boolean;
-    onChange: (params: DataTypeOnChangeParams['update']) => void
+    isFieldFocused?: boolean;
+    onChange: (params: IEventPayload) => void;
+    onClick: (params: IEventPayload) => void
 }

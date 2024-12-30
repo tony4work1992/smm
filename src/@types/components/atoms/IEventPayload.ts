@@ -4,5 +4,5 @@ export interface IEventObject {
 }
 
 export interface IEventPayload {
-    update: IEventObject | IEventObject[]
+    update: IEventObject | IEventObject[],
 }

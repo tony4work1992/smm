@@ -1,28 +1,28 @@
-import { FieldOnChangeParams } from '../../../../@types/components/atoms/IDataTypeProps';
+import { IEventPayload } from '../../../../@types/components/atoms/IEventPayload';
 import { IInputModelTree } from '../../../../@types/IInputModelTree';
 import FieldNodeMolecules from '../../../molecules/field-node';
 
-const useTreeDataBuilder = (onFieldChange: (params: FieldOnChangeParams) => void) => {
+interface IInitEventReturn {
+    onChange: (params: IEventPayload) => void;
+    onBlur: (params: IEventPayload) => void;
+    onDoubleClick: (params: IEventPayload) => void;
+    onPressEnter: (params: IEventPayload) => void;
+    onClick: (params: IEventPayload) => void;
+}
+
+const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEventReturn) => {
     const build = (treeData: IInputModelTree[]): IInputModelTree[] => {
         return treeData.map((item) => {
+            const events = initEventsFunc(item)
             return {
                 ...item,
                 key: `${item.fPath}`, // Key of the node
                 title: (
                     <FieldNodeMolecules
-                        onChange={(params) => {
-                            onFieldChange({ ...params, ...item })
-                        }}
-                        onBlur={(params) => {
-                            onFieldChange({ ...params, ...item })
-                        }}
-                        onDoubleClick={(params) => {
-                            onFieldChange({ ...params, ...item })
-                        }}
-                        onPressEnter={(params) => {
-                            onFieldChange({ ...params, ...item })
-                        }}
+                        {...events}
                         isFieldEdit={item.isFieldEdit}
+                        isDefaultValueEdit={item.isDefaultValueEdit}
+                        isFieldFocused={item.isFieldFocused}
                         fPath={`${item.fPath}`}
                         fieldname={item.fieldname}
                         datatype={item.datatype}

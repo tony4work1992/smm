@@ -2,6 +2,7 @@ import { AimOutlined } from '@ant-design/icons';
 import { Dropdown, MenuProps, Space, Tag } from 'antd';
 import React from 'react';
 import { IDataTypeProps } from '../../../@types/components/atoms/IDataTypeProps';
+import useFieldFocusHandler from '../hooks/useFieldFocusHandler';
 
 
 const tagTagStyle: React.CSSProperties = {
@@ -70,16 +71,25 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
         ];
     }, [props.datatype]);
 
+    const fieldFocusHandler = useFieldFocusHandler()
+
+    const styles = React.useMemo(() => ({ ...tagTagStyle, ...fieldFocusHandler.getFocusedStyles(!!props.isFieldFocused, tagTagStyle) }), [props.isFieldFocused])
+
     if (props.hide) {
         return <></>
     }
 
     return (
-        <Tag style={tagTagStyle} key={`${props.datatype}_${props.fPath}`}>
-            <Dropdown trigger={["click"]} menu={{ items: menus }} >
+        <Tag style={styles} key={`${props.datatype}_${props.fPath}`}
+            onClick={() => {
+                props.onClick({ update: { key: 'isFieldFocused', value: true } })
+            }
+            }
+        >
+            <Dropdown trigger={["contextMenu"]} menu={{ items: menus }} >
                 <Space >
                     <AimOutlined style={{ paddingTop: 2 }} />
-                    {props.datatype} {">>"}
+                    {props.datatype}
                 </Space>
             </Dropdown>
         </Tag>

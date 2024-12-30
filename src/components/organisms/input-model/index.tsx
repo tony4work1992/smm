@@ -3,7 +3,7 @@ import { flatten, unflatten } from 'flat';
 import _ from 'lodash';
 import React from 'react';
 import { FieldOnChangeParams } from '../../../@types/components/atoms/IDataTypeProps';
-import { IEventObject } from '../../../@types/components/atoms/IEventPayload';
+import { IEventObject, IEventPayload } from '../../../@types/components/atoms/IEventPayload';
 import { IInputModelTree } from '../../../@types/IInputModelTree';
 import useInputConverter from './hooks/useInputConverter';
 import useInputDataManager from './hooks/useInputDataManager';
@@ -27,9 +27,9 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
         // console.log(params)
         const path = modelProcessor.getInputPath(`${params.fPath}`);
         if (_.isArray(params.update)) {
-            params.update.map((item) => {
+            for (const item of params.update) {
                 inputDataManager.modify(`${path}.metadata.${item.key}`, item.value)
-            })
+            }
             const flattenObj = inputDataManager.get()
             // const flattenObj = inputDataManager.modify(`${path}.metadata.${item.key}`, item.value)
             const treeData = inputConverter.convert(unflatten(flattenObj));
@@ -46,7 +46,29 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
         }
     }
 
-    const treeDataBuilder = useTreeDataBuilder(onFieldChange);
+    const initEvents = (item: IInputModelTree) => {
+        return {
+            onChange: (params: IEventPayload) => {
+                onFieldChange({ ...params, ...item })
+            },
+            onBlur: (params: IEventPayload) => {
+                onFieldChange({ ...params, ...item })
+            },
+            onDoubleClick: (params: IEventPayload) => {
+                onFieldChange({ ...params, ...item })
+            },
+            onPressEnter: (params: IEventPayload) => {
+                onFieldChange({ ...params, ...item })
+            },
+            onClick: (params: IEventPayload) => {
+                // Reset
+                
+                onFieldChange({ ...params, ...item })
+            }
+        }
+    }
+
+    const treeDataBuilder = useTreeDataBuilder(initEvents);
 
     React.useEffect(() => {
         if (!props.data) {

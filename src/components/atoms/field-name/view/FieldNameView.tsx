@@ -3,7 +3,6 @@ import { FormOutlined } from '@ant-design/icons';
 import { FieldNameViewProps } from '../../../../@types/components/atoms/FieldNameProps';
 import React from 'react';
 import useFieldFocusHandler from '../../hooks/useFieldFocusHandler';
-import useHotKeys from '../../../../hooks/useHotKeysClassifier.ts';
 import useHotKeysClassifier from '../../../../hooks/useHotKeysClassifier.ts';
 
 const originalStyle: React.CSSProperties = {

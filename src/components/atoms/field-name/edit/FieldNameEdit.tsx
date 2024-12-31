@@ -1,4 +1,4 @@
-import { Input, InputRef } from 'antd';
+import { Input } from 'antd';
 import { FieldNameEditProps } from '../../../../@types/components/atoms/FieldNameProps';
 import React from 'react';
 import useAutoFocus from '../../../../hooks/useAutoFocus';

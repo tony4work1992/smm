@@ -1,6 +1,6 @@
 import React, { Key } from 'react';
-import { IInputModelTree } from '../../../../@types/IInputModelTree';
-import { IData } from '../types/StateTypes';
+import { IInputModelTree } from '../@types/IInputModelTree';
+import { IData } from '../components/organisms/input-model/types/StateTypes';
 
 const useInputConverter = () => {
     const keysRef = React.useRef<Key[]>([])

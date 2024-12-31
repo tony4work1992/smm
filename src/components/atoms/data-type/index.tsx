@@ -1,4 +1,4 @@
-import { AimOutlined } from '@ant-design/icons';
+import { SettingOutlined } from '@ant-design/icons';
 import { Dropdown, MenuProps, Space, Tag } from 'antd';
 import React from 'react';
 import { IDataTypeProps } from '../../../@types/components/atoms/IDataTypeProps';
@@ -13,10 +13,12 @@ const originalStyle: React.CSSProperties = {
     borderBottom: 0,
     borderRight: 0,
     borderRadius: 0,
-    borderLeft: '3px solid green',
-    color: 'green',
+    borderLeft: 0, //'2px solid #7f857f',
+    color: 'whitesmoke',
     fontWeight: "bold",
-    background: "white"
+    background: 'rgba(255, 255, 255, 0)',
+    transition: "color 0.25s ease-out, background 0.25s ease-out"
+
 };
 
 
@@ -26,7 +28,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
         return [{
             key: 'List',
             label: 'List',
-            icon: <AimOutlined style={{ paddingTop: 2 }} />,
+            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘L',
             onClick: (e) => {
                 props.onChange({ update: { key: 'datatype', value: e.key } })
@@ -35,7 +37,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
         {
             key: 'Object',
             label: 'Object',
-            icon: <AimOutlined style={{ paddingTop: 2 }} />,
+            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘S',
             onClick: (e) => {
                 props.onChange({ update: { key: 'datatype', value: e.key } })
@@ -44,7 +46,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
         {
             key: 'String',
             label: 'String',
-            icon: <AimOutlined style={{ paddingTop: 2 }} />,
+            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘S',
             onClick: (e) => {
                 props.onChange({ update: { key: 'datatype', value: e.key } })
@@ -53,7 +55,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
         {
             key: 'Number',
             label: 'Number',
-            icon: <AimOutlined style={{ paddingTop: 2 }} />,
+            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘S',
             onClick: (e) => {
                 props.onChange({ update: { key: 'datatype', value: e.key } })
@@ -62,7 +64,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
         {
             key: 'Boolean',
             label: 'Boolean',
-            icon: <AimOutlined style={{ paddingTop: 2 }} />,
+            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘S',
             onClick: (e) => {
                 props.onChange({ update: { key: 'datatype', value: e.key } })
@@ -83,7 +85,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
         >
             <Dropdown trigger={["contextMenu"]} menu={{ items: menus }} >
                 <Space >
-                    <AimOutlined style={{ paddingTop: 2 }} />
+                    <SettingOutlined style={{ paddingTop: 2 }} />
                     {props.datatype}
                 </Space>
             </Dropdown>

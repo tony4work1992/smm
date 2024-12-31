@@ -13,11 +13,13 @@ const originalStyle: React.CSSProperties = {
     borderRight: 0,
     borderRadius: 0,
     borderLeft: 0,
-    color: 'green',
-    fontWeight: "bold",
-    background: "white",
+    color: 'white',
+    // fontWeight: "bold",
+    fontStyle: "italic",
+    background: 'rgba(255, 255, 255, 0)',
     paddingRight: 2,
-    paddingLeft: 5
+    paddingLeft: 5,
+    transition: "color 0.25s ease-out, background 0.25s ease-out"
 };
 
 const FieldNameView: React.FC<FieldNameViewProps> = (props) => {

@@ -1,9 +1,9 @@
-import { Tag } from 'antd';
-import { DefaultValueViewProps } from '../../../../@types/components/atoms/IDefaultValueProps';
-import useFieldFocusHandler from '../../hooks/useFieldFocusHandler';
-import React from 'react';
 import { EditOutlined } from '@ant-design/icons';
+import { Tag } from 'antd';
+import React from 'react';
+import { DefaultValueViewProps } from '../../../../@types/components/atoms/IDefaultValueProps';
 import useHotKeysClassifier from '../../../../hooks/useHotKeysClassifier';
+import useFieldFocusHandler from '../../hooks/useFieldFocusHandler';
 
 const originalStyle: React.CSSProperties = {
     height: 25,
@@ -14,10 +14,10 @@ const originalStyle: React.CSSProperties = {
     borderRight: 0,
     borderRadius: 0,
     borderLeft: 0,
-    color: 'green',
-    fontWeight: "bold",
-    background: "white",
-    paddingLeft: 0
+    color: 'whitesmoke',
+    background: 'rgba(255, 255, 255, 0)',
+    paddingLeft: 0,
+    transition: "color 0.25s ease-out, background 0.25s ease-out"
 };
 
 const DefaultValueView: React.FC<DefaultValueViewProps> = (props) => {
@@ -26,7 +26,7 @@ const DefaultValueView: React.FC<DefaultValueViewProps> = (props) => {
     const hotkeys = useHotKeysClassifier(props.hotkeys);
     return (
         <Tag style={styles} defaultValue={props.defaultValue}
-            onClick={() => { 
+            onClick={() => {
                 props.onClick({ update: { key: 'isFieldFocused', value: true } })
             }}
             onDoubleClick={() => {
@@ -34,14 +34,14 @@ const DefaultValueView: React.FC<DefaultValueViewProps> = (props) => {
             }}
             onKeyDown={(e) => {
                 const event = hotkeys.getEventByKey(e);
-                if(event === 'onClick') {
+                if (event === 'onClick') {
                     props.onClick({ update: { key: 'isFieldFocused', value: true } })
                 }
-                if(event === 'onDoubleClick') {
+                if (event === 'onDoubleClick') {
                     props.onDoubleClick({ update: [{ key: 'isFieldEdit', value: true }] })
                 }
             }}  >
-                <EditOutlined style={ {...styles, paddingRight: 4} } />
+            <EditOutlined style={{ ...styles, paddingRight: 4 }} />
             {props.defaultValue}
         </Tag>
     )

@@ -13,6 +13,12 @@ const useFocusPath = () => {
     }, [focusPathRef.current])
     const set = (path: string) => focusPathRef.current = path;
 
+    const focus = () => {
+        setTimeout(() => {
+            document.getElementById(`${focusPathRef.current}_input` || '')?.focus()
+        }, 200)
+    }
+
     const modify = (path: string) => {
         focusPathRef.current = path;
         return focusPathRef.current;
@@ -25,7 +31,8 @@ const useFocusPath = () => {
     return {
         set,
         get,
-        modify
+        modify,
+        focus
     }
 }
 

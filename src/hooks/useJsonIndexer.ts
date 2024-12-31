@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import { IData, IValueData } from '../types/StateTypes';
+import { IData, IValueData } from '../components/organisms/input-model/types/StateTypes';
 
 const useJsonIndexer = () => {
     const indexRef = React.useRef<number>(0);

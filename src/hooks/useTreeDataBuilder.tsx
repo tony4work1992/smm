@@ -1,6 +1,6 @@
-import { IEventPayload } from '../../../../@types/components/atoms/IEventPayload';
-import { IInputModelTree } from '../../../../@types/IInputModelTree';
-import FieldNodeMolecules from '../../../molecules/field-node';
+import { IEventPayload } from '../@types/components/atoms/IEventPayload';
+import { IInputModelTree } from '../@types/IInputModelTree';
+import FieldNodeMolecules from '../components/molecules/field-node';
 
 export interface IInitEventReturn {
     onChange: (params: IEventPayload) => void;

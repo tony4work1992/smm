@@ -3,8 +3,9 @@ const useFieldFocusHandler = () => {
         if (isFocused) {
             return {
                 ...style,
-                background: "#339933",
-                color: "#ffffff"
+                background: "whitesmoke",
+                color: "gray",
+                transition: 'background 0.25s ease-in, color 0.25s ease-in'
             }
         }
         return style;

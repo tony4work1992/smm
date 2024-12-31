@@ -10,6 +10,7 @@ import useInputDataManager from './hooks/useInputDataManager';
 import useModelProcessor from './hooks/useModelProcessor';
 import useTreeDataBuilder from './hooks/useTreeDataBuilder';
 import { IData } from './types/StateTypes';
+import useFocusPath from './hooks/useFocusPath';
 
 
 interface InputModelOrganismProps {
@@ -21,11 +22,13 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
     const inputDataManager = useInputDataManager();
     const modelProcessor = useModelProcessor();
     const inputConverter = useInputConverter();
-
+    // Focused Field
+    const focusField = useFocusPath();
 
     const onFieldChange = (params: FieldOnChangeParams) => {
         // console.log(params)
         const path = modelProcessor.getInputPath(`${params.fPath}`);
+        
         if (_.isArray(params.update)) {
             for (const item of params.update) {
                 inputDataManager.modify(`${path}.metadata.${item.key}`, item.value)
@@ -34,16 +37,24 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
             // const flattenObj = inputDataManager.modify(`${path}.metadata.${item.key}`, item.value)
             const treeData = inputConverter.convert(unflatten(flattenObj));
             setState(treeData);
-            console.log('treeData', treeData, params)
-
         }
+
         if (_.isObject(params.update)) {
             const update = params.update as IEventObject;
             const flattenObj = inputDataManager.modify(`${path}.metadata.${update.key}`, update.value)
             const treeData = inputConverter.convert(unflatten(flattenObj));
             setState(treeData);
-
         }
+    }
+
+    const onFieldFocus = (params: FieldOnChangeParams) => {
+        let focusingPath = focusField.get();
+        if (focusingPath) {
+            const path = modelProcessor.getInputPath(`${focusingPath}`);
+            // Reset the current focusing path.
+            inputDataManager.modify(`${path}.metadata.isFieldFocused`, false)
+        }
+        focusField.set(params.fPath);
     }
 
     const initEvents = (item: IInputModelTree) => {
@@ -62,7 +73,7 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
             },
             onClick: (params: IEventPayload) => {
                 // Reset
-                
+                onFieldFocus({ ...params, ...item });
                 onFieldChange({ ...params, ...item })
             }
         }

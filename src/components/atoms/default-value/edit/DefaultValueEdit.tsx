@@ -1,5 +1,6 @@
 import { Input } from 'antd';
 import { DefaultValueEditProps } from '../../../../@types/components/atoms/IDefaultValueProps';
+import useAutoFocus from '../../../../hooks/useAutoFocus';
 
 const tagInputStyle: React.CSSProperties = {
     paddingLeft: 0,
@@ -9,19 +10,18 @@ const tagInputStyle: React.CSSProperties = {
     height: 25,
     marginInlineStart: 5,
     verticalAlign: 'middle',
-    borderTop: 0,
-    borderLeft: 0,
-    borderRight: 0,
-    borderBottom: '0px solid green',
+    border: '1px dashed green',
     borderRadius: 0,
-    // background: "rgb(153 245 153)",
     color: 'green'
 };
 
 const DefaultValueEdit: React.FC<DefaultValueEditProps> = (props) => {
+    const selfRef = useAutoFocus()
+    
     return (
         <Input
-            style={tagInputStyle}
+            id={selfRef}
+            style={{...tagInputStyle, width: `${props.defaultValue.length + 4}ch`}}
             defaultValue={props.defaultValue}
             onPressEnter={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 props.onPressEnter({
@@ -31,7 +31,6 @@ const DefaultValueEdit: React.FC<DefaultValueEditProps> = (props) => {
                     ]
                 })
             }}
-
             onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                 props.onBlur({
                     update: [

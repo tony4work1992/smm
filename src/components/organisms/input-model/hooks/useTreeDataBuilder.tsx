@@ -27,7 +27,9 @@ const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEven
                         fieldname={item.fieldname}
                         datatype={item.datatype}
                         defaultValue={item.defaultValue}
-                        key={item.fPath} />
+                        key={item.fPath}
+                        hotkeys={[{event: 'onDoubleClick', key: 'm'}]}
+                         />
                 ),
                 children: build(item.children || []), // Recursive call for children
             }

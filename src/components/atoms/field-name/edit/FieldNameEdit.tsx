@@ -1,5 +1,7 @@
-import { Input } from 'antd';
+import { Input, InputRef } from 'antd';
 import { FieldNameEditProps } from '../../../../@types/components/atoms/FieldNameProps';
+import React from 'react';
+import useAutoFocus from '../../../../hooks/useAutoFocus';
 
 const tagInputStyle: React.CSSProperties = {
     paddingLeft: 0,
@@ -9,19 +11,19 @@ const tagInputStyle: React.CSSProperties = {
     height: 25,
     marginInlineStart: 5,
     verticalAlign: 'middle',
-    borderTop: 0,
-    borderLeft: 0,
-    borderRight: 0,
-    borderBottom: '0px solid green',
+    border: '1px dashed green',
     borderRadius: 0,
     // background: "rgb(153 245 153)",
     color: 'green'
 };
 
 const FieldNameEdit: React.FC<FieldNameEditProps> = (props) => {
+    const selfRef = useAutoFocus()
+
     return (
         <Input
-            style={tagInputStyle}
+            id={selfRef}
+            style={{...tagInputStyle, width: `${props.fieldname.length + 4}ch`}}
             defaultValue={props.fieldname}
             onPressEnter={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 props.onPressEnter({

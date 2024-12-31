@@ -1,7 +1,7 @@
-import { IEventPayload } from './IEventPayload';
+import { ICommonEvents, ICommonProps, IEventPayload } from './IEventPayload';
 
 
-export interface DefaultValueViewProps {
+export interface DefaultValueViewProps extends ICommonEvents, ICommonProps {
     defaultValue: string;
     fPath: string;
     hide?: boolean;

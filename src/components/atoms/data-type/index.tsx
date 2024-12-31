@@ -5,7 +5,7 @@ import { IDataTypeProps } from '../../../@types/components/atoms/IDataTypeProps'
 import useFieldFocusHandler from '../hooks/useFieldFocusHandler';
 
 
-const tagTagStyle: React.CSSProperties = {
+const originalStyle: React.CSSProperties = {
     height: 25,
     marginInlineEnd: 0,
     verticalAlign: 'middle',
@@ -73,18 +73,13 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
 
     const fieldFocusHandler = useFieldFocusHandler()
 
-    const styles = React.useMemo(() => ({ ...tagTagStyle, ...fieldFocusHandler.getFocusedStyles(!!props.isFieldFocused, tagTagStyle) }), [props.isFieldFocused])
-
-    if (props.hide) {
-        return <></>
-    }
+    const styles = React.useMemo(() => ({ ...originalStyle, ...fieldFocusHandler.getFocusedStyles(!!props.isFieldFocused, originalStyle) }), [props.isFieldFocused])
 
     return (
         <Tag style={styles} key={`${props.datatype}_${props.fPath}`}
             onClick={() => {
                 props.onClick({ update: { key: 'isFieldFocused', value: true } })
-            }
-            }
+            }}
         >
             <Dropdown trigger={["contextMenu"]} menu={{ items: menus }} >
                 <Space >

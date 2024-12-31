@@ -1,7 +1,7 @@
-import { IEventPayload } from './IEventPayload';
+import { ICommonEvents, ICommonProps, IEventPayload } from './IEventPayload';
 
 
-export interface FieldNameViewProps {
+export interface FieldNameViewProps extends ICommonEvents, ICommonProps  {
     fieldname: string;
     fPath: string;
     hide?: boolean;

@@ -1,5 +1,4 @@
-import { PropsWithChildren } from 'react';
-import { IEventPayload } from './IEventPayload';
+import { ICommonEvents, ICommonProps, IEventPayload } from './IEventPayload';
 
 
 export interface DataTypeOnChangeParams {
@@ -19,11 +18,9 @@ export interface TreeDataBuilderEvents {
     onFieldChange: (params: DataTypeOnChangeParams) => void;
 }
 
-export interface IDataTypeProps extends PropsWithChildren {
+export interface IDataTypeProps extends ICommonEvents, ICommonProps {
     datatype: string;
     fPath: string;
     hide?: boolean;
-    isFieldFocused?: boolean;
     onChange: (params: IEventPayload) => void;
-    onClick: (params: IEventPayload) => void
 }

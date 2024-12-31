@@ -26,6 +26,7 @@ const useInputConverter = () => {
                 isFieldEdit: (value as any).metadata.isFieldEdit,
                 isDefaultValueEdit: (value as any).metadata.isDefaultValueEdit,
                 isFieldFocused: (value as any).metadata.isFieldFocused,
+                dataIndex: value.metadata.dataIndex
             };
         });
 

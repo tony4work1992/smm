@@ -2,15 +2,19 @@ import { IEventPayload } from '../../../../@types/components/atoms/IEventPayload
 import { IInputModelTree } from '../../../../@types/IInputModelTree';
 import FieldNodeMolecules from '../../../molecules/field-node';
 
-interface IInitEventReturn {
+export interface IInitEventReturn {
     onChange: (params: IEventPayload) => void;
     onBlur: (params: IEventPayload) => void;
     onDoubleClick: (params: IEventPayload) => void;
     onPressEnter: (params: IEventPayload) => void;
     onClick: (params: IEventPayload) => void;
+    onArrowUp: (params: IEventPayload) => void;
+    onArrowDown: (params: IEventPayload) => void;
+    onArrowLeft: (params: IEventPayload) => void;
+    onArrowRight: (params: IEventPayload) => void;
 }
 
-const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEventReturn) => {
+const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEventReturn, hotkeys: { key: string, event: string }[]) => {
     const build = (treeData: IInputModelTree[]): IInputModelTree[] => {
         return treeData.map((item) => {
             const events = initEventsFunc(item)
@@ -28,8 +32,8 @@ const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEven
                         datatype={item.datatype}
                         defaultValue={item.defaultValue}
                         key={item.fPath}
-                        hotkeys={[{event: 'onDoubleClick', key: 'm'}]}
-                         />
+                        hotkeys={hotkeys}
+                    />
                 ),
                 children: build(item.children || []), // Recursive call for children
             }

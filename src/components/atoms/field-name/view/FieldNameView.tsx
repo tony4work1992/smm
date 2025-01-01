@@ -2,7 +2,6 @@ import { FormOutlined } from '@ant-design/icons';
 import { Input, Tag } from 'antd';
 import React from 'react';
 import { FieldNameViewProps } from '../../../../@types/components/atoms/FieldNameProps';
-import useFieldFocusHandler from '../../hooks/useFieldFocusHandler';
 
 const originalStyle: React.CSSProperties = {
     height: 25,
@@ -14,7 +13,6 @@ const originalStyle: React.CSSProperties = {
     borderRadius: 0,
     borderLeft: 0,
     color: 'white',
-    // fontWeight: "bold",
     fontStyle: "italic",
     background: 'rgba(255, 255, 255, 0)',
     paddingRight: 2,
@@ -23,21 +21,16 @@ const originalStyle: React.CSSProperties = {
 };
 
 const FieldNameView: React.FC<FieldNameViewProps> = (props) => {
-    const fieldFocusHandler = useFieldFocusHandler()
 
-    const styles = React.useMemo(() => ({ ...originalStyle, ...fieldFocusHandler.getFocusedStyles(!!props.isFieldFocused, originalStyle) }), [props.isFieldFocused])
     return (
         <Tag
-            style={styles} defaultValue={props.fieldname}
-            onClick={() => {
-                props.onClick({ update: { key: 'isFieldFocused', value: true } })
-            }}
+            style={originalStyle} defaultValue={props.fieldname}
             onDoubleClick={() => {
                 props.onDoubleClick({ update: [{ key: 'isFieldEdit', value: true }] })
             }}
         >
-            <FormOutlined style={{ ...styles, paddingRight: 2 }} />
-            <Input id={`${props.fPath}_input`} readOnly value={props.fieldname} style={{ ...styles, width: `${props.fieldname.length + 2}ch` }} />
+            <FormOutlined style={{ ...originalStyle, paddingRight: 2 }} />
+            <Input id={`${props.fPath}_input`} readOnly value={props.fieldname} style={{ ...originalStyle, width: `${props.fieldname.length + 2}ch` }} />
         </Tag>
     )
 }

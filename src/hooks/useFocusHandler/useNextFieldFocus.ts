@@ -1,24 +1,38 @@
+import { unflatten } from 'flat';
+import _ from 'lodash';
 import { IInputModelTree } from '../../@types/IInputModelTree';
 import { HookReturnedParams } from '../types';
 
 export const useNextFieldFocus = (params: HookReturnedParams) => {
 
-    const findNextField = (item: IInputModelTree) => {
-        const { focusField, modelProcessor, inputDataManager } = params;
-        const focusingPath = focusField.get();
-        const path = modelProcessor.getInputPath(`${focusingPath}`);
+    const findNextField = (item: Pick<IInputModelTree, 'dataIndex' | 'fPath'>) => {
+        const { modelProcessor, inputDataManager } = params;
+        const path = modelProcessor.getInputPath(`${item.fPath}`);
         inputDataManager.modify(`${path}.metadata.isFieldFocused`, false);
-        const nextDataIndex = Object.entries(inputDataManager.get()).find(([key, value]) => {
+        const [key] = Object.entries(inputDataManager.get()).find(([key, value]) => {
             if (item.dataIndex === null || item.dataIndex === undefined) {
                 return false;
             }
             return (key.includes('metadata.dataIndex') && value === item.dataIndex + 1)
-        });
-        return nextDataIndex;
+        }) || [''];
+
+        const nextMetadataPath = key.replace(".metadata.dataIndex", "");
+        const unflattenData = unflatten(inputDataManager.get());
+
+
+        const nextFieldObj = _.get(unflattenData, nextMetadataPath)
+
+        return {
+            dataIndex: nextFieldObj.metadata.dataIndex,
+            datatype: nextFieldObj.metadata.datatype,
+            defaultValue: nextFieldObj.metadata.defaultValue,
+            fPath: nextMetadataPath.replace(/.fields/g, ""),
+            fieldname: nextFieldObj.metadata.fieldname,
+        }
 
     }
 
-    const validate = (item: IInputModelTree) => {
+    const validate = (item: Pick<IInputModelTree, 'dataIndex'>) => {
         if (item.dataIndex && item.dataIndex >= params.jsonIndexer.getMaxIndex()) {
             throw new Error(
                 `The current data Index is greater than the max data index:

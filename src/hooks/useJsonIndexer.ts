@@ -12,7 +12,6 @@ const useJsonIndexer = () => {
         if (obj.metadata) {
             obj.metadata.dataIndex = indexRef.current;
         }
-        console.log('>>>', obj.metadata.fieldname, indexRef.current)
 
         // Process fields recursively
         if (obj.fields) {

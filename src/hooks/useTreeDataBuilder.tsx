@@ -8,10 +8,6 @@ export interface IInitEventReturn {
     onDoubleClick: (params: IEventPayload) => void;
     onPressEnter: (params: IEventPayload) => void;
     onClick: (params: IEventPayload) => void;
-    onArrowUp: (params: IEventPayload) => void;
-    onArrowDown: (params: IEventPayload) => void;
-    onArrowLeft: (params: IEventPayload) => void;
-    onArrowRight: (params: IEventPayload) => void;
 }
 
 const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEventReturn, hotkeys: { key: string, event: string }[]) => {
@@ -21,6 +17,8 @@ const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEven
             return {
                 ...item,
                 key: `${item.fPath}`, // Key of the node
+                selectable: true,
+                dataIndex: item.dataIndex,
                 title: (
                     <FieldNodeMolecules
                         {...events}

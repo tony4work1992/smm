@@ -14,6 +14,7 @@ const useInputDataManager = () => {
         return inputDataRef.current;
     }
 
+
     return {
         set,
         get,

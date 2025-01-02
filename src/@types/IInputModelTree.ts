@@ -1,10 +1,8 @@
-import { TreeDataNode } from 'antd';
-import { IMetaData } from './IMetaData';
+import { ILevelObject } from '../hooks/types';
 
-export interface IInputModelTree extends IMetaData, Omit<TreeDataNode, 'children' | 'key'> {
-    children: IInputModelTree[]
-    fPath: string;
+export interface IInputModelTree extends ILevelObject {
+    index: number;
     isFieldEdit: boolean;
     isDefaultValueEdit: boolean;
-    // Check if the row is focus or not
+    disabled?: boolean;
 };

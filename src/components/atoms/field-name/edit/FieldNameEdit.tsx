@@ -13,8 +13,6 @@ const tagInputStyle: React.CSSProperties = {
     verticalAlign: 'middle',
     border: '1px dashed green',
     borderRadius: 0,
-    // background: "rgb(153 245 153)",
-    // color: 'green'
 };
 
 const FieldNameEdit: React.FC<FieldNameEditProps> = (props) => {

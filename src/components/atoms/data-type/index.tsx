@@ -13,10 +13,10 @@ const originalStyle: React.CSSProperties = {
     borderRight: 0,
     borderRadius: 0,
     borderLeft: 0,
-    // color: ThemeStyles.TEXT_COLOR_LEVEL_1,
     fontWeight: "bold",
     background: 'rgba(255, 255, 255, 0)',
     transition: "color 0.25s ease-out, background 0.25s ease-out"
+
 };
 
 

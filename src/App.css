@@ -47,18 +47,5 @@
 .ant-tree .ant-tree-treenode {
   border-bottom: 1px dashed #406a85 !important;
   width: 100% !important;
-  margin-bottom: 0 !important;
-}
 
-.ant-tree .ant-tree-treenode-selected .ant-tree-node-content-wrapper {
-  border-radius: 15px 0px 0px 15px;
-}
-
-.ant-tree-switcher {
-  display: none;
-}
-
-.ant-tree .ant-tree-treenode-selected span,
-.ant-tree .ant-tree-treenode-selected span input {
-  color: #ffffff !important;
 }

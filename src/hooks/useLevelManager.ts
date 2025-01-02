@@ -1,8 +1,11 @@
+import * as _ from 'lodash';
 import React from 'react';
-import { ILevelObject } from './types';
+import { IInputModelTree } from '../@types/IInputModelTree';
+import useModelProcessor from './useModelProcessor';
 
 export const useLevelManager = () => {
-    const levelStack = React.useRef<ILevelObject[]>([]);
+    const levelStack = React.useRef<IInputModelTree[]>([]);
+    const modelProcessor = useModelProcessor();
 
     const build = (items: Record<string, any>) => {
         const keys = Object.keys(items).map(key => {
@@ -15,14 +18,35 @@ export const useLevelManager = () => {
             return retStr;
         })
 
-        levelStack.current = Array.from(new Set(keys)).map((item) => {
+        levelStack.current = Array.from(new Set(keys)).map((item, index) => {
+            const rootPath = modelProcessor.getInputPath(item).concat('.metadata');
+            const paths = {
+                datatype: '.datatype',
+                fieldname: '.fieldname',
+                defaultValue: '.defaultValue',
+                dataIndex: '.dataIndex',
+                isFieldEdit: '.isFieldEdit',
+                isDefaultValueEdit: '.isDefaultValueEdit',
+                disabled: '.disabled',
+            }
+            const metadata = {
+                datatype: _.get(items, rootPath.concat(paths.datatype)),
+                fieldname: _.get(items, rootPath.concat(paths.fieldname)),
+                defaultValue: _.get(items, rootPath.concat(paths.defaultValue)),
+                dataIndex: _.get(items, rootPath.concat(paths.dataIndex)),
+                isFieldEdit: _.get(items, rootPath.concat(paths.isFieldEdit)),
+                isDefaultValueEdit: _.get(items, rootPath.concat(paths.isDefaultValueEdit)),
+                disabled: _.get(items, rootPath.concat(paths.disabled))
+            };
             return {
+                index,
+                ...metadata,
                 fPath: item,
                 level: item.split('.').length - 1,
-                prefix: 'L'
+                prefix: 'L',
             }
         })
-        return levelStack;
+        return levelStack.current;
     }
 
     const get = () => levelStack.current

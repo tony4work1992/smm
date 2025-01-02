@@ -1,7 +1,7 @@
-import { ICommonEvents, ICommonProps, IEventPayload } from './IEventPayload';
+import { ICommonProps, IEventPayload } from './IEventPayload';
 
 
-export interface DefaultValueViewProps extends ICommonEvents, ICommonProps {
+export interface DefaultValueViewProps extends ICommonProps {
     defaultValue: string;
     fPath: string;
     hide?: boolean;
@@ -11,8 +11,9 @@ export interface DefaultValueViewProps extends ICommonEvents, ICommonProps {
 
 export interface DefaultValueEditProps {
     defaultValue: string;
+    datatype: string;
     fPath: string;
     hide?: boolean;
-    onPressEnter: (params: IEventPayload) => void;
-    onBlur: (params: IEventPayload) => void;
+    confirm: (params: IEventPayload) => void;
+    cancel: (params: IEventPayload) => void;
 }

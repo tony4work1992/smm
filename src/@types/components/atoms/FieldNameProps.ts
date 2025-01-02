@@ -1,7 +1,7 @@
-import { ICommonEvents, ICommonProps, IEventPayload } from './IEventPayload';
+import { ICommonProps, IEventPayload } from './IEventPayload';
 
 
-export interface FieldNameViewProps extends ICommonEvents, ICommonProps  {
+export interface FieldNameViewProps extends ICommonProps {
     fieldname: string;
     fPath: string;
     hide?: boolean;
@@ -13,6 +13,6 @@ export interface FieldNameEditProps {
     fieldname: string;
     fPath: string;
     hide?: boolean;
-    onPressEnter: (params: IEventPayload) => void;
-    onBlur: (params: IEventPayload) => void;
+    confirm: (params: IEventPayload) => void;
+    cancel: (params: IEventPayload) => void;
 }

@@ -1,6 +1,6 @@
 import { Input } from 'antd';
-import { FieldNameEditProps } from '../../../../@types/components/atoms/FieldNameProps';
 import React from 'react';
+import { FieldNameEditProps } from '../../../../@types/components/atoms/FieldNameProps';
 import useAutoFocus from '../../../../hooks/useAutoFocus';
 
 const tagInputStyle: React.CSSProperties = {
@@ -14,7 +14,7 @@ const tagInputStyle: React.CSSProperties = {
     border: '1px dashed green',
     borderRadius: 0,
     // background: "rgb(153 245 153)",
-    color: 'green'
+    // color: 'green'
 };
 
 const FieldNameEdit: React.FC<FieldNameEditProps> = (props) => {
@@ -23,10 +23,10 @@ const FieldNameEdit: React.FC<FieldNameEditProps> = (props) => {
     return (
         <Input
             id={selfRef}
-            style={{...tagInputStyle, width: `${props.fieldname.length + 4}ch`}}
+            style={{ ...tagInputStyle, width: `${props.fieldname.length + 4}ch` }}
             defaultValue={props.fieldname}
             onPressEnter={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                props.onPressEnter({
+                props.confirm({
                     update: [
                         { key: 'fieldname', value: e.currentTarget.value || '' },
                         { key: 'isFieldEdit', value: false }
@@ -34,8 +34,19 @@ const FieldNameEdit: React.FC<FieldNameEditProps> = (props) => {
                     ]
                 })
             }}
+            onKeyUp={(e) => {
+                if (e.code === 'Escape') {
+                    e.preventDefault()
+                    props.cancel({
+                        update: [
+                            { key: 'defaultValue', value: props.fieldname || '' },
+                            { key: 'isDefaultValueEdit', value: false }
+                        ]
+                    })
+                }
+            }}
             onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                props.onBlur({
+                props.confirm({
                     update: [
                         { key: 'fieldname', value: e.currentTarget.value || '' },
                         { key: 'isFieldEdit', value: false }

@@ -12,12 +12,11 @@ const originalStyle: React.CSSProperties = {
     borderBottom: 0,
     borderRight: 0,
     borderRadius: 0,
-    borderLeft: 0, //'2px solid #7f857f',
-    color: 'whitesmoke',
+    borderLeft: 0,
+    // color: ThemeStyles.TEXT_COLOR_LEVEL_1,
     fontWeight: "bold",
     background: 'rgba(255, 255, 255, 0)',
     transition: "color 0.25s ease-out, background 0.25s ease-out"
-
 };
 
 
@@ -30,7 +29,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
             icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘L',
             onClick: (e) => {
-                props.onChange({ update: { key: 'datatype', value: e.key } })
+                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: '' }] })
             }
         },
         {
@@ -39,7 +38,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
             icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘S',
             onClick: (e) => {
-                props.onChange({ update: { key: 'datatype', value: e.key } })
+                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: '' }] })
             }
         },
         {
@@ -48,7 +47,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
             icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘S',
             onClick: (e) => {
-                props.onChange({ update: { key: 'datatype', value: e.key } })
+                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: '' }] })
             }
         },
         {
@@ -57,7 +56,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
             icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘S',
             onClick: (e) => {
-                props.onChange({ update: { key: 'datatype', value: e.key } })
+                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: 0 }] })
             }
         },
         {
@@ -66,7 +65,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
             icon: <SettingOutlined style={{ paddingTop: 2 }} />,
             extra: '⌘S',
             onClick: (e) => {
-                props.onChange({ update: { key: 'datatype', value: e.key } })
+                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: "false" }] })
             }
         },
         ];
@@ -75,10 +74,8 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
 
 
     return (
-        <Tag style={originalStyle} key={`${props.datatype}_${props.fPath}`}
-
-        >
-            <Dropdown trigger={["contextMenu"]} menu={{ items: menus }} >
+        <Tag style={originalStyle} key={`${props.datatype}_${props.fPath}`}>
+            <Dropdown trigger={["contextMenu"]} menu={{ items: menus }} open={props.open}>
                 <Space >
                     <SettingOutlined style={{ paddingTop: 2 }} />
                     {props.datatype}

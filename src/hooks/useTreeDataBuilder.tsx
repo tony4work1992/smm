@@ -4,9 +4,9 @@ import FieldNodeMolecules from '../components/molecules/field-node';
 
 export interface IInitEventReturn {
     onChange: (params: IEventPayload) => void;
-    onBlur: (params: IEventPayload) => void;
     onDoubleClick: (params: IEventPayload) => void;
-    onPressEnter: (params: IEventPayload) => void;
+    confirm: (params: IEventPayload) => void;
+    cancel: (params: IEventPayload) => void;
 }
 
 const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEventReturn, hotkeys: { key: string, event: string }[]) => {

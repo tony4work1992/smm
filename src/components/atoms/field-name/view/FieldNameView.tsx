@@ -1,5 +1,5 @@
 import { FormOutlined } from '@ant-design/icons';
-import { Input, Tag } from 'antd';
+import { Tag } from 'antd';
 import React from 'react';
 import { FieldNameViewProps } from '../../../../@types/components/atoms/FieldNameProps';
 
@@ -12,7 +12,7 @@ const originalStyle: React.CSSProperties = {
     borderRight: 0,
     borderRadius: 0,
     borderLeft: 0,
-    color: 'white',
+    // color: ThemeStyles.TEXT_COLOR_LEVEL_1,
     fontStyle: "italic",
     background: 'rgba(255, 255, 255, 0)',
     paddingRight: 2,
@@ -24,13 +24,15 @@ const FieldNameView: React.FC<FieldNameViewProps> = (props) => {
 
     return (
         <Tag
+            tabIndex={0}
             style={originalStyle} defaultValue={props.fieldname}
             onDoubleClick={() => {
                 props.onDoubleClick({ update: [{ key: 'isFieldEdit', value: true }] })
             }}
+            id={`${props.fPath}_input`}
         >
             <FormOutlined style={{ ...originalStyle, paddingRight: 2 }} />
-            <Input id={`${props.fPath}_input`} readOnly value={props.fieldname} style={{ ...originalStyle, width: `${props.fieldname.length + 2}ch` }} />
+            {props.fieldname}
         </Tag>
     )
 }

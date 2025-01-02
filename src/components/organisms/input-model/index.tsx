@@ -2,6 +2,7 @@ import { ConfigProvider, GetProps, List, Tree } from 'antd';
 import { EventDataNode } from 'antd/es/tree';
 import { flatten } from 'flat';
 import React from 'react';
+import { ThemeStyles } from '../../../@constants/theme-styles/ThemeStyles';
 import { IEventPayload } from '../../../@types/components/atoms/IEventPayload';
 import { IInputModelTree } from '../../../@types/IInputModelTree';
 import { useEditState } from '../../../hooks/useEditState';
@@ -18,6 +19,8 @@ import useJsonIndexer from '../../../hooks/useJsonIndexer';
 import { useLevelManager } from '../../../hooks/useLevelManager';
 import useModelProcessor from '../../../hooks/useModelProcessor';
 import useTreeDataBuilder, { IInitEventReturn } from '../../../hooks/useTreeDataBuilder';
+import { useListValidator } from '../../../hooks/useValueValidators/useListValidator';
+import { useObjectValidator } from '../../../hooks/useValueValidators/useObjectValidator';
 import { hotkeys } from './constants/HotKeyConfig';
 import { IData } from './types/StateTypes';
 
@@ -44,6 +47,8 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
     const editToggle = useEditToggle({ focusField, inputConverter, inputDataManager, jsonIndexer, modelProcessor });
     const editState = useEditState();
     const levelManager = useLevelManager();
+    const objectValidator = useObjectValidator();
+    const listValidator = useListValidator();
     const [selectedNode, setSelectedNode] = React.useState<{ key: React.Key, info: EventDataNode<IInputModelTree> }>();
 
     const initEvents = (item: IInputModelTree): IInitEventReturn => {
@@ -52,21 +57,12 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                 const treeData = fieldChange.process({ ...params, ...item })
                 if (treeData) setState(treeData);
             },
-            onBlur: (params: IEventPayload) => {
-                const treeData = fieldChange.process({ ...params, ...item })
-                if (treeData) {
-                    setState(treeData)
-                    editState.disableEditMode();
-                    focusField.focus();
-
-                };
-            },
             onDoubleClick: (params: IEventPayload) => {
                 const treeData = fieldChange.process({ ...params, ...item })
                 editState.enableEditMode(item);
                 if (treeData) setState(treeData);
             },
-            onPressEnter: (params: IEventPayload) => {
+            cancel: (params: IEventPayload) => {
                 const treeData = fieldChange.process({ ...params, ...item })
                 if (treeData) {
                     setState(treeData)
@@ -75,6 +71,15 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                     console.log(document.activeElement, 'document.activeElement', focusField.get().current)
                 }
             },
+            confirm: (params: IEventPayload) => {
+                const treeData = fieldChange.process({ ...params, ...item })
+                if (treeData) {
+                    setState(treeData)
+                    editState.disableEditMode();
+                    focusField.focus();
+                    console.log(document.activeElement, 'document.activeElement', focusField.get().current)
+                }
+            }
 
         }
     }
@@ -120,7 +125,6 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
         inputDataManager.set(flattenData);
         const treeData = inputConverter.convert(indexedData);
         levelManager.build(flattenData)
-        console.log(levelManager.log())
         setState(treeData);
     }, [])
 
@@ -145,6 +149,7 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                 }
                 if (e.code === 'ArrowUp' && selectedNode?.info) {
                     e.preventDefault();
+
                     onArrowUp(selectedNode?.info);
                 }
                 if (e.code === 'ArrowLeft' && selectedNode?.info) {
@@ -163,18 +168,23 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                 }
                 if (e.code === 'KeyD' && selectedNode?.info) {
                     e.preventDefault();
+                    const isObject = objectValidator.isObjectDatatype(selectedNode?.info.datatype);
+                    const isList = listValidator.isListDatatype(selectedNode?.info.datatype);
+                    if (isObject || isList) {
+                        return;
+                    }
                     editState.enableEditMode(selectedNode?.info);
                     const unflattenData = editToggle.editDefaultValue(selectedNode?.info);
                     setState(unflattenData)
                 }
             }}
-            style={{ outline: 'none', display: 'flex', flexDirection: 'row' }} // Remove default focus outline
+            style={{ outline: 'none', display: 'flex', flexDirection: 'row', border: '2px solid #014f80' }} // Remove default focus outline
         >
             <ConfigProvider
                 theme={{
                     components: {
                         Tree: {
-                            nodeSelectedBg: '#99d8ff',
+                            nodeSelectedBg: ThemeStyles.BACKGROUND_LEVEL_5,
                             colorText: 'white',
                             titleHeight: 25
                         },
@@ -183,10 +193,10 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                 }}
             >
                 <List style={{ background: 'rgb(13 111 172)' }} dataSource={levelManager.get()} renderItem={(item) => {
-                    return <List.Item style={{ height: 26, padding: '0px 4px', marginBottom: 4, color: 'white', borderBottom: '1px dashed rgb(114 162 192)', fontWeight: 'bold' }} >{item.prefix}{item.level}</List.Item>;
+                    return <List.Item style={{ height: 26, padding: '0px 4px', marginBottom: 0, color: 'white', borderBottom: '1px dashed rgb(114 162 192)', fontWeight: 'bold', background: (ThemeStyles.getBgForLevel(item.level)) }} >{item.prefix}{item.level}</List.Item>;
                 }} />
                 <Tree
-                    style={{ background: 'rgb(0, 61, 99)' }}
+                    // style={{ background: 'rgb(0, 61, 99)' }}
                     switcherIcon={<></>}
                     onSelect={onSelect}
                     selectable={true}

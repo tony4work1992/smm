@@ -6,9 +6,7 @@ import { HookReturnedParams } from '../types';
 export const useTrailFieldFocus = (params: HookReturnedParams) => {
 
     const findTrailField = (item: Pick<IInputModelTree, 'dataIndex' | 'fPath'>) => {
-        const { modelProcessor, inputDataManager, jsonIndexer } = params;
-        const path = modelProcessor.getInputPath(`${item.fPath}`);
-        inputDataManager.modify(`${path}.metadata.isFieldFocused`, false);
+        const { inputDataManager, jsonIndexer } = params;
         const [key] = Object.entries(inputDataManager.get()).find(([key, value]) => {
             if (item.dataIndex === null || item.dataIndex === undefined) {
                 return false;

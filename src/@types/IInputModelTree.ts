@@ -7,5 +7,4 @@ export interface IInputModelTree extends IMetaData, Omit<TreeDataNode, 'children
     isFieldEdit: boolean;
     isDefaultValueEdit: boolean;
     // Check if the row is focus or not
-    isFieldFocused: boolean;
 };

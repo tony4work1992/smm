@@ -6,9 +6,7 @@ import { HookReturnedParams } from '../types';
 export const useNextFieldFocus = (params: HookReturnedParams) => {
 
     const findNextField = (item: Pick<IInputModelTree, 'dataIndex' | 'fPath'>) => {
-        const { modelProcessor, inputDataManager } = params;
-        const path = modelProcessor.getInputPath(`${item.fPath}`);
-        inputDataManager.modify(`${path}.metadata.isFieldFocused`, false);
+        const { inputDataManager } = params;
         const [key] = Object.entries(inputDataManager.get()).find(([key, value]) => {
             if (item.dataIndex === null || item.dataIndex === undefined) {
                 return false;

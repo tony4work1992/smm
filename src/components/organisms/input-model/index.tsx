@@ -1,20 +1,21 @@
-import { ConfigProvider, GetProps, Tree } from 'antd';
+import { ConfigProvider, GetProps, List, Tree } from 'antd';
 import { EventDataNode } from 'antd/es/tree';
 import { flatten } from 'flat';
 import React from 'react';
 import { IEventPayload } from '../../../@types/components/atoms/IEventPayload';
 import { IInputModelTree } from '../../../@types/IInputModelTree';
 import { useEditState } from '../../../hooks/useEditState';
+import { useEditToggle } from '../../../hooks/useEditToggle';
 import { useFieldChange } from '../../../hooks/useFieldChange';
-import { useDirectFocus } from '../../../hooks/useFocusHandler/useDirectFocus';
 import { useHeadFieldFocus } from '../../../hooks/useFocusHandler/useHeadFieldFocus';
 import { useNextFieldFocus } from '../../../hooks/useFocusHandler/useNextFieldFocus';
 import { usePrevFieldFocus } from '../../../hooks/useFocusHandler/usePrevFieldFocus';
 import { useTrailFieldFocus } from '../../../hooks/useFocusHandler/useTrailFieldFocus';
-import useFocusPath from '../../../hooks/useFocusPath';
+import useFocusHelper from '../../../hooks/useFocusHelper';
 import useInputConverter from '../../../hooks/useInputConverter';
 import useInputDataManager from '../../../hooks/useInputDataManager';
 import useJsonIndexer from '../../../hooks/useJsonIndexer';
+import { useLevelManager } from '../../../hooks/useLevelManager';
 import useModelProcessor from '../../../hooks/useModelProcessor';
 import useTreeDataBuilder, { IInitEventReturn } from '../../../hooks/useTreeDataBuilder';
 import { hotkeys } from './constants/HotKeyConfig';
@@ -33,16 +34,17 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
     const modelProcessor = useModelProcessor();
     const inputConverter = useInputConverter();
     // Focused Field
-    const focusField = useFocusPath();
+    const focusField = useFocusHelper('input-model-wrapper');
     const jsonIndexer = useJsonIndexer();
     const nextFieldFocus = useNextFieldFocus({ focusField, inputConverter, inputDataManager, jsonIndexer, modelProcessor })
     const prevFieldFocus = usePrevFieldFocus({ focusField, inputConverter, inputDataManager, jsonIndexer, modelProcessor })
     const headFieldFocus = useHeadFieldFocus({ focusField, inputConverter, inputDataManager, jsonIndexer, modelProcessor })
     const trailFieldFocus = useTrailFieldFocus({ focusField, inputConverter, inputDataManager, jsonIndexer, modelProcessor })
     const fieldChange = useFieldChange({ focusField, inputConverter, inputDataManager, jsonIndexer, modelProcessor });
-    const directFocus = useDirectFocus({ focusField, inputConverter, inputDataManager, jsonIndexer, modelProcessor });
-    const [selectedNode, setSelectedNode] = React.useState<{ key: React.Key, info: EventDataNode<IInputModelTree> }>();
+    const editToggle = useEditToggle({ focusField, inputConverter, inputDataManager, jsonIndexer, modelProcessor });
     const editState = useEditState();
+    const levelManager = useLevelManager();
+    const [selectedNode, setSelectedNode] = React.useState<{ key: React.Key, info: EventDataNode<IInputModelTree> }>();
 
     const initEvents = (item: IInputModelTree): IInitEventReturn => {
         return {
@@ -56,6 +58,7 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                     setState(treeData)
                     editState.disableEditMode();
                     focusField.focus();
+
                 };
             },
             onDoubleClick: (params: IEventPayload) => {
@@ -69,13 +72,8 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                     setState(treeData)
                     editState.disableEditMode();
                     focusField.focus();
+                    console.log(document.activeElement, 'document.activeElement', focusField.get().current)
                 }
-            },
-            onClick: (params: IEventPayload) => {
-                // Reset
-                directFocus.process({ ...params, ...item });
-                const treeData = fieldChange.process({ ...params, ...item })
-                if (treeData) setState(treeData);
             },
 
         }
@@ -118,9 +116,11 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
         inputConverter.setKeysRef([])
         jsonIndexer.reset()
         const indexedData = jsonIndexer.process(props.data);
-
-        inputDataManager.set(flatten<IData, Record<string, any>>(indexedData))
+        const flattenData = flatten<IData, Record<string, any>>(indexedData);
+        inputDataManager.set(flattenData);
         const treeData = inputConverter.convert(indexedData);
+        levelManager.build(flattenData)
+        console.log(levelManager.log())
         setState(treeData);
     }, [])
 
@@ -133,9 +133,9 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
 
     return (
         <div
+            id={'input-model-wrapper'}
             tabIndex={0} // Make div focusable
             onKeyDown={(e) => {
-                console.log(selectedNode);
                 if (editState.isEditing()) {
                     return;
                 }
@@ -145,7 +145,6 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                 }
                 if (e.code === 'ArrowUp' && selectedNode?.info) {
                     e.preventDefault();
-                    console.log(selectedNode?.info);
                     onArrowUp(selectedNode?.info);
                 }
                 if (e.code === 'ArrowLeft' && selectedNode?.info) {
@@ -156,8 +155,20 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                     e.preventDefault();
                     onArrowRight(selectedNode?.info);
                 }
+                if (e.code === 'KeyF' && selectedNode?.info) {
+                    e.preventDefault();
+                    editState.enableEditMode(selectedNode?.info);
+                    const unflattenData = editToggle.editFieldName(selectedNode?.info);
+                    setState(unflattenData)
+                }
+                if (e.code === 'KeyD' && selectedNode?.info) {
+                    e.preventDefault();
+                    editState.enableEditMode(selectedNode?.info);
+                    const unflattenData = editToggle.editDefaultValue(selectedNode?.info);
+                    setState(unflattenData)
+                }
             }}
-            style={{ outline: 'none' }} // Remove default focus outline
+            style={{ outline: 'none', display: 'flex', flexDirection: 'row' }} // Remove default focus outline
         >
             <ConfigProvider
                 theme={{
@@ -165,11 +176,15 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
                         Tree: {
                             nodeSelectedBg: '#99d8ff',
                             colorText: 'white',
-                        }
+                            titleHeight: 25
+                        },
                     },
                     token: {},
                 }}
             >
+                <List style={{ background: 'rgb(13 111 172)' }} dataSource={levelManager.get()} renderItem={(item) => {
+                    return <List.Item style={{ height: 26, padding: '0px 4px', marginBottom: 4, color: 'white', borderBottom: '1px dashed rgb(114 162 192)', fontWeight: 'bold' }} >{item.prefix}{item.level}</List.Item>;
+                }} />
                 <Tree
                     style={{ background: 'rgb(0, 61, 99)' }}
                     switcherIcon={<></>}
@@ -190,3 +205,4 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
 };
 
 export default InputModelOrganism;
+

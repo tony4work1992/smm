@@ -6,15 +6,15 @@ import { HookReturnedParams } from '../types';
 export const useHeadFieldFocus = (params: HookReturnedParams) => {
 
     const findHeadField = (item: Pick<IInputModelTree, 'dataIndex' | 'fPath'>) => {
-        const { modelProcessor, inputDataManager } = params;
-        const path = modelProcessor.getInputPath(`${item.fPath}`);
-        inputDataManager.modify(`${path}.metadata.isFieldFocused`, false);
+        const { inputDataManager } = params;
+
         const [key] = Object.entries(inputDataManager.get()).find(([key, value]) => {
             if (item.dataIndex === null || item.dataIndex === undefined) {
                 return false;
             }
             return (key.includes('metadata.dataIndex') && value === 0)
         }) || [''];
+
         const nextMetadataPath = key.replace(".metadata.dataIndex", "");
         const unflattenData = unflatten(inputDataManager.get());
 

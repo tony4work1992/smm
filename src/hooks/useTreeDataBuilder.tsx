@@ -7,7 +7,6 @@ export interface IInitEventReturn {
     onBlur: (params: IEventPayload) => void;
     onDoubleClick: (params: IEventPayload) => void;
     onPressEnter: (params: IEventPayload) => void;
-    onClick: (params: IEventPayload) => void;
 }
 
 const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEventReturn, hotkeys: { key: string, event: string }[]) => {
@@ -24,7 +23,6 @@ const useTreeDataBuilder = (initEventsFunc: (item: IInputModelTree) => IInitEven
                         {...events}
                         isFieldEdit={item.isFieldEdit}
                         isDefaultValueEdit={item.isDefaultValueEdit}
-                        isFieldFocused={item.isFieldFocused}
                         fPath={`${item.fPath}`}
                         fieldname={item.fieldname}
                         datatype={item.datatype}

@@ -2,7 +2,6 @@ import { SettingOutlined } from '@ant-design/icons';
 import { Dropdown, MenuProps, Space, Tag } from 'antd';
 import React from 'react';
 import { IDataTypeProps } from '../../../@types/components/atoms/IDataTypeProps';
-import useFieldFocusHandler from '../hooks/useFieldFocusHandler';
 
 
 const originalStyle: React.CSSProperties = {
@@ -73,15 +72,11 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
         ];
     }, [props.datatype]);
 
-    const fieldFocusHandler = useFieldFocusHandler()
 
-    const styles = React.useMemo(() => ({ ...originalStyle, ...fieldFocusHandler.getFocusedStyles(!!props.isFieldFocused, originalStyle) }), [props.isFieldFocused])
 
     return (
-        <Tag style={styles} key={`${props.datatype}_${props.fPath}`}
-            onClick={() => {
-                props.onClick({ update: { key: 'isFieldFocused', value: true } })
-            }}
+        <Tag style={originalStyle} key={`${props.datatype}_${props.fPath}`}
+
         >
             <Dropdown trigger={["contextMenu"]} menu={{ items: menus }} >
                 <Space >

@@ -6,9 +6,7 @@ import { HookReturnedParams } from '../types';
 export const usePrevFieldFocus = (params: HookReturnedParams) => {
 
     const findPrevField = (item: Pick<IInputModelTree, 'dataIndex' | 'fPath'>) => {
-        const { modelProcessor, inputDataManager } = params;
-        const path = modelProcessor.getInputPath(`${item.fPath}`);
-        inputDataManager.modify(`${path}.metadata.isFieldFocused`, false);
+        const { inputDataManager } = params;
         const [key] = Object.entries(inputDataManager.get()).find(([key, value]) => {
             return (key.includes('metadata.dataIndex') && item.dataIndex && value === item.dataIndex - 1)
         }) || [''];

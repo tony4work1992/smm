@@ -2,8 +2,10 @@ import React, { Key } from 'react';
 import { IInputModelTree } from '../@types/IInputModelTree';
 import { IData } from '../components/organisms/input-model/types/StateTypes';
 
+
 const useInputConverter = () => {
-    const keysRef = React.useRef<Key[]>([])
+    const keysRef = React.useRef<Key[]>([]);
+
 
     /**
      * Convert into format of the tree
@@ -25,7 +27,6 @@ const useInputConverter = () => {
                 children: convert(value.fields, currentPath),
                 isFieldEdit: (value as any).metadata.isFieldEdit,
                 isDefaultValueEdit: (value as any).metadata.isDefaultValueEdit,
-                isFieldFocused: (value as any).metadata.isFieldFocused,
                 dataIndex: value.metadata.dataIndex
             };
         });

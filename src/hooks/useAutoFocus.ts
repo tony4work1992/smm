@@ -1,5 +1,8 @@
 import React from "react";
-
+/**
+ * Auto focus when component displayed
+ * @returns 
+ */
 const useAutoFocus = () => {
     const selfRef = React.useId()
     React.useEffect(() => {

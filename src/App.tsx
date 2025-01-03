@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import InputModelOrganism from './components/organisms/smv';
+import SmartModelVisualizer from './components/organisms/smv';
 
 const data = {
   user: {
@@ -118,9 +118,9 @@ const App: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <InputModelOrganism data={data} />
+      <SmartModelVisualizer data={data} />
       <div style={{ width: 400 }}></div>
-      <InputModelOrganism data={data} />
+      <SmartModelVisualizer data={data} />
     </div>
   );
 };

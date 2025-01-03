@@ -8,6 +8,7 @@ import { ILevelObject } from '../../../hooks/types';
 import { useEditState } from '../../../hooks/useEditState';
 import useFocusHelper from '../../../hooks/useFocusHelper';
 import useInputDataManager from '../../../hooks/useInputDataManager';
+import { useItemPadding } from '../../../hooks/useItemPadding';
 import { useLevelManager } from '../../../hooks/useLevelManager';
 import FieldNodeMolecules from '../../molecules/field-node';
 import { IData } from './types/StateTypes';
@@ -26,6 +27,7 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
     const editState = useEditState();
     const levelManager = useLevelManager();
     const [selectedNode, setSelectedNode] = React.useState<IInputModelTree>();
+    const itemPadding = useItemPadding();
 
 
     const onArrowUp = (params: IInputModelTree) => {
@@ -164,11 +166,14 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
             }}
             style={{ outline: 'none', display: 'flex', flexDirection: 'row' }} // Remove default focus outline
         >
-
+            <div style={{ width: 30, backgroundColor: 'blue' }}></div>
             <List
                 style={{ border: '2px solid #0f6fac', width: 600, height: 1000, overflow: 'scroll' }}
-                dataSource={state}
+                dataSource={itemPadding.add(state)}
                 renderItem={(item) => {
+                    if (!Object.keys(item).length) {
+                        return <List.Item style={{ ...itemListStyle }} />
+                    }
                     let focusedStyle: React.CSSProperties = {};
                     if (item.fPath === selectedNode?.fPath) {
                         focusedStyle = { backgroundColor: '#0f6fac', color: 'white !important' }

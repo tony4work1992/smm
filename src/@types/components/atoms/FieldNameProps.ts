@@ -1,10 +1,10 @@
-import { ICommonProps, IEventPayload } from './IEventPayload';
+import { ILevelObject } from '../../../hooks/types';
+import { IEventPayload } from './IEventPayload';
 
 
-export interface FieldNameViewProps extends ICommonProps {
-    fieldname: string;
-    fPath: string;
+export interface FieldNameViewProps extends ILevelObject {
     hide?: boolean;
+    selected?: ILevelObject;
     onDoubleClick: (params: IEventPayload) => void;
 }
 

@@ -22,59 +22,58 @@ const originalStyle: React.CSSProperties = {
 
 
 const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
-    const menus: MenuProps['items'] = React.useMemo(() => {
-        return [{
-            key: 'List',
-            label: 'List',
-            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
-            extra: '⌘L',
-            onClick: (e) => {
-                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: '' }] })
-            }
-        },
-        {
-            key: 'Object',
-            label: 'Object',
-            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
-            extra: '⌘S',
-            onClick: (e) => {
-                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: '' }] })
-            }
-        },
-        {
-            key: 'String',
-            label: 'String',
-            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
-            extra: '⌘S',
-            onClick: (e) => {
-                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: '' }] })
-            }
-        },
-        {
-            key: 'Number',
-            label: 'Number',
-            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
-            extra: '⌘S',
-            onClick: (e) => {
-                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: 0 }] })
-            }
-        },
-        {
-            key: 'Boolean',
-            label: 'Boolean',
-            icon: <SettingOutlined style={{ paddingTop: 2 }} />,
-            extra: '⌘S',
-            onClick: (e) => {
-                props.onChange({ update: [{ key: 'datatype', value: e.key }, { key: 'defaultValue', value: "false" }] })
-            }
-        },
-        ];
-    }, [props.datatype]);
+    const menus: MenuProps['items'] = [{
+        key: 'List',
+        label: 'List',
+        icon: <SettingOutlined style={{ paddingTop: 2 }} />,
+        extra: '⌘L',
+        onClick: (e) => {
+            props.onChange({ update: { datatype: e.key, defaultValue: '' } })
+        }
+    },
+    {
+        key: 'Object',
+        label: 'Object',
+        icon: <SettingOutlined style={{ paddingTop: 2 }} />,
+        extra: '⌘S',
+        onClick: (e) => {
+            props.onChange({ update: { datatype: e.key, defaultValue: '' } })
+        }
+    },
+    {
+        key: 'String',
+        label: 'String',
+        icon: <SettingOutlined style={{ paddingTop: 2 }} />,
+        extra: '⌘S',
+        onClick: (e) => {
+            props.onChange({ update: { datatype: e.key, defaultValue: '' } })
+        }
+    },
+    {
+        key: 'Number',
+        label: 'Number',
+        icon: <SettingOutlined style={{ paddingTop: 2 }} />,
+        extra: '⌘S',
+        onClick: (e) => {
+            props.onChange({ update: { datatype: e.key, defaultValue: '0' } })
+        }
+    },
+    {
+        key: 'Boolean',
+        label: 'Boolean',
+        icon: <SettingOutlined style={{ paddingTop: 2 }} />,
+        extra: '⌘S',
+        onClick: (e) => {
+            props.onChange({ update: { datatype: e.key, defaultValue: "false" } });
+        }
+    }]
 
-
+    const isSelected = props.selected?.fPath === props.fPath;
 
     return (
-        <Tag style={originalStyle} key={`${props.datatype}_${props.fPath}`}>
+        <Tag
+            style={{ ...originalStyle, color: isSelected ? "white" : "initial" }}
+            key={`${props.datatype}_${props.fPath}`}>
             <Dropdown trigger={["contextMenu"]} menu={{ items: menus }} open={props.open}>
                 <Space >
                     <SettingOutlined style={{ paddingTop: 2 }} />

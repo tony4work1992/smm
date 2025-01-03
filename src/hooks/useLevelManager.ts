@@ -24,7 +24,6 @@ export const useLevelManager = () => {
                 datatype: '.datatype',
                 fieldname: '.fieldname',
                 defaultValue: '.defaultValue',
-                dataIndex: '.dataIndex',
                 isFieldEdit: '.isFieldEdit',
                 isDefaultValueEdit: '.isDefaultValueEdit',
                 disabled: '.disabled',
@@ -33,7 +32,6 @@ export const useLevelManager = () => {
                 datatype: _.get(items, rootPath.concat(paths.datatype)),
                 fieldname: _.get(items, rootPath.concat(paths.fieldname)),
                 defaultValue: _.get(items, rootPath.concat(paths.defaultValue)),
-                dataIndex: _.get(items, rootPath.concat(paths.dataIndex)),
                 isFieldEdit: _.get(items, rootPath.concat(paths.isFieldEdit)),
                 isDefaultValueEdit: _.get(items, rootPath.concat(paths.isDefaultValueEdit)),
                 disabled: _.get(items, rootPath.concat(paths.disabled))

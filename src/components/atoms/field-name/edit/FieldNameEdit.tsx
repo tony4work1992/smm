@@ -25,31 +25,37 @@ const FieldNameEdit: React.FC<FieldNameEditProps> = (props) => {
             defaultValue={props.fieldname}
             onPressEnter={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 props.confirm({
-                    update: [
-                        { key: 'fieldname', value: e.currentTarget.value || '' },
-                        { key: 'isFieldEdit', value: false }
+                    update:
+                    {
+                        fieldname: e.currentTarget.value || '',
+                        isFieldEdit: false
+                    }
 
-                    ]
+
                 })
             }}
             onKeyUp={(e) => {
                 if (e.code === 'Escape') {
                     e.preventDefault()
                     props.cancel({
-                        update: [
-                            { key: 'defaultValue', value: props.fieldname || '' },
-                            { key: 'isDefaultValueEdit', value: false }
-                        ]
+                        update:
+                        {
+                            defaultValue: props.fieldname || '',
+                            isDefaultValueEdit: false
+                        }
+
                     })
                 }
             }}
             onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                 props.confirm({
-                    update: [
-                        { key: 'fieldname', value: e.currentTarget.value || '' },
-                        { key: 'isFieldEdit', value: false }
+                    update:
+                    {
+                        fieldname: e.currentTarget.value || '',
+                        isFieldEdit: false
+                    }
 
-                    ]
+
                 })
             }} />
     )

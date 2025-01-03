@@ -1,10 +1,6 @@
 const useModelProcessor = () => {
     const getInputPath = (path: string) => {
-        const inputPath = path?.split('.').join('.fields.');
-        if (!inputPath) {
-            throw new Error(`Path is empty: ${path}`)
-        }
-        return inputPath;
+        return path?.split('.').join('.fields.');
 
     }
     return { getInputPath }

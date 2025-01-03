@@ -1,4 +1,5 @@
-import { ICommonProps, IEventPayload } from './IEventPayload';
+import { ILevelObject } from '../../../hooks/types';
+import { IEventPayload } from './IEventPayload';
 
 
 export interface DataTypeOnChangeParams {
@@ -18,10 +19,9 @@ export interface TreeDataBuilderEvents {
     onFieldChange: (params: DataTypeOnChangeParams) => void;
 }
 
-export interface IDataTypeProps extends ICommonProps {
-    datatype: string;
-    fPath: string;
+export interface IDataTypeProps extends ILevelObject {
     hide?: boolean;
     open?: boolean;
+    selected?: ILevelObject;
     onChange: (params: IEventPayload) => void;
 }

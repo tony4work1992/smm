@@ -31,10 +31,11 @@ const DefaultValueEdit: React.FC<DefaultValueEditProps> = (props) => {
             extra: '⌘N',
             onClick: (e) => {
                 props.confirm({
-                    update: [
-                        { key: 'defaultValue', value: e.key || '' },
-                        { key: 'isDefaultValueEdit', value: false }
-                    ]
+                    update:
+                    {
+                        defaultValue: e.key || '',
+                        isDefaultValueEdit: false
+                    }
                 })
             }
         },
@@ -45,10 +46,11 @@ const DefaultValueEdit: React.FC<DefaultValueEditProps> = (props) => {
             extra: '⌘T',
             onClick: (e) => {
                 props.confirm({
-                    update: [
-                        { key: 'defaultValue', value: e.key || '' },
-                        { key: 'isDefaultValueEdit', value: false }
-                    ]
+                    update:
+                    {
+                        defaultValue: e.key || '',
+                        isDefaultValueEdit: false
+                    }
                 })
             }
         },
@@ -59,10 +61,11 @@ const DefaultValueEdit: React.FC<DefaultValueEditProps> = (props) => {
             extra: '⌘F',
             onClick: (e) => {
                 props.confirm({
-                    update: [
-                        { key: 'defaultValue', value: e.key || '' },
-                        { key: 'isDefaultValueEdit', value: false }
-                    ]
+                    update:
+                    {
+                        defaultValue: e.key || '',
+                        isDefaultValueEdit: false
+                    }
                 })
             }
         }]
@@ -77,29 +80,23 @@ const DefaultValueEdit: React.FC<DefaultValueEditProps> = (props) => {
                 defaultValue={props.defaultValue}
                 onPressEnter={(e: React.KeyboardEvent<HTMLInputElement>) => {
                     props.confirm({
-                        update: [
-                            { key: 'defaultValue', value: e.currentTarget.value || '' },
-                            { key: 'isDefaultValueEdit', value: false }
-                        ]
+                        update: { defaultValue: e.currentTarget.value || '', isDefaultValueEdit: false }
                     })
                 }}
                 onKeyUp={(e) => {
                     if (e.code === 'Escape') {
                         e.preventDefault()
                         props.cancel({
-                            update: [
-                                { key: 'defaultValue', value: props.defaultValue || '' },
-                                { key: 'isDefaultValueEdit', value: false }
-                            ]
+                            update: {
+                                defaultValue: props.defaultValue || '',
+                                isDefaultValueEdit: false
+                            }
                         })
                     }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                     props.confirm({
-                        update: [
-                            { key: 'defaultValue', value: e.currentTarget.value || '' },
-                            { key: 'isDefaultValueEdit', value: false }
-                        ]
+                        update: { defaultValue: e.currentTarget.value || '', isDefaultValueEdit: false }
                     })
                 }}
             />

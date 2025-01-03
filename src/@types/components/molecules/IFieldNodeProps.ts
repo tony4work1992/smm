@@ -5,4 +5,5 @@ import { IDataTypeProps } from '../atoms/IDataTypeProps';
 export type FieldNodeProps = {
     isFieldEdit?: boolean;
     isDefaultValueEdit?: boolean;
-} &  IDataTypeProps & FieldNameEditProps & FieldNameViewProps & ILevelObject
+    selected: ILevelObject;
+} & IDataTypeProps & FieldNameEditProps & FieldNameViewProps & ILevelObject

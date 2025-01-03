@@ -1,14 +1,12 @@
+import { IInputModelTree } from '../../IInputModelTree';
+
 export interface IEventObject {
     key: string,
     value: string | boolean | number
 }
 
 export interface IEventPayload {
-    update: IEventObject[],
+    update: Partial<IInputModelTree>
 }
 
-
-export interface ICommonProps {
-    hotkeys: { key: string, event: string }[]
-}
 

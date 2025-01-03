@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import InputModelOrganism from './components/organisms/input-model';
+import InputModelOrganism from './components/organisms/smv';
 
 const data = {
   user: {

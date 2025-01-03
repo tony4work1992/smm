@@ -12,13 +12,13 @@ import { useLevelManager } from '../../../hooks/useLevelManager';
 import FieldNodeMolecules from '../../molecules/field-node';
 import { IData } from './types/StateTypes';
 
-interface InputModelOrganismProps {
+interface SmartModelVisualizerProps {
     data: IData
 }
 
 const itemListStyle = { height: 26, padding: '0px 0px', color: '#0f6fac', borderBottom: '1px dashed rgb(114 162 192)', fontWeight: 'bold' };
 
-const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
+const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
     const [state, setState] = React.useState<IInputModelTree[]>([]);
     const inputDataManager = useInputDataManager();
     // Focused Field
@@ -229,6 +229,6 @@ const InputModelOrganism: React.FC<InputModelOrganismProps> = (props) => {
 };
 
 
-export default InputModelOrganism
+export default SmartModelVisualizer
 
 

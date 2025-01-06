@@ -1,2 +1,1 @@
-export { default as DataTypeAtom } from './data-type';
-
+export { default as DataTypeAtom } from "./data-type";

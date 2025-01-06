@@ -47,5 +47,25 @@
 .ant-tree .ant-tree-treenode {
   border-bottom: 1px dashed #406a85 !important;
   width: 100% !important;
+}
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+ ::-webkit-scrollbar-track {
+  background: white;
+}
+
+ ::-webkit-scrollbar-thumb {
+  background: lightgray;
+  border-radius: 10px;
+}
+
+div:hover::-webkit-scrollbar-thumb {
+  background: gray;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: black !important;
 }

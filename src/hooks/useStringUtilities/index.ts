@@ -1,11 +1,11 @@
 export const useStringUtilities = () => {
-    const trim = (str: string) => {
-        if (str.length > 17) {
-            return str.slice(0, 17).concat('...');
-        }
-        return str;
+  const trim = (str: string) => {
+    if (str.length > 17) {
+      return str.slice(0, 17).concat("...");
     }
-    return {
-        trim
-    }
-}
+    return str;
+  };
+  return {
+    trim,
+  };
+};

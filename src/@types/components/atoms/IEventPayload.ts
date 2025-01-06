@@ -1,12 +1,10 @@
-import { IInputModelTree } from '../../IInputModelTree';
+import { IInputModelTree } from "../../IInputModelTree";
 
 export interface IEventObject {
-    key: string,
-    value: string | boolean | number
+  key: string;
+  value: string | boolean | number;
 }
 
 export interface IEventPayload {
-    update: Partial<IInputModelTree>
+  update: Partial<IInputModelTree>;
 }
-
-

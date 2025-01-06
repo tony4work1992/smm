@@ -1,25 +1,24 @@
-import React from 'react';
+import React from "react";
 
 const useFocusHelper = (id: string) => {
-    const focusPathRef = React.useRef<String>(id);
+  const focusPathRef = React.useRef<String>(id);
 
+  // const set = (path: string) => focusPathRef.current = path;
 
-    // const set = (path: string) => focusPathRef.current = path;
+  const focus = () => {
+    setTimeout(() => {
+      document.getElementById(`${focusPathRef.current}` || "")?.focus();
+    }, 150);
+  };
 
-    const focus = () => {
-        setTimeout(() => {
-            document.getElementById(`${focusPathRef.current}` || '')?.focus()
-        }, 150)
-    }
+  const get = () => {
+    return focusPathRef;
+  };
 
-    const get = () => {
-        return focusPathRef;
-    }
-
-    return {
-        get,
-        focus
-    }
-}
+  return {
+    get,
+    focus,
+  };
+};
 
 export default useFocusHelper;

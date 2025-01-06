@@ -1,24 +1,20 @@
 import React from "react";
-import { IInputModelTree } from "../@types/IInputModelTree";
 /**
  * Let the organism know that an input is editing
  * @returns
  */
 export const useEditState = () => {
-  const [editState, setEditState] = React.useState<{
-    editing: Boolean;
-    info: IInputModelTree | null;
-  }>();
-  const enableEditMode = (info: IInputModelTree) => {
-    setEditState({ editing: true, info });
+  const editStateRef = React.useRef<{ editing: boolean }>({ editing: false });
+  const enableEditMode = () => {
+    editStateRef.current = { editing: true };
   };
   const disableEditMode = () => {
-    setEditState({ editing: false, info: null });
+    editStateRef.current = { editing: false };
   };
 
   return {
     enableEditMode,
     disableEditMode,
-    isEditing: () => editState?.editing,
+    isEditing: () => editStateRef.current.editing,
   };
 };

@@ -1,6 +1,7 @@
 import { Tag } from "antd";
 import React from "react";
 import { DefaultValueViewProps } from "../../../../@types/components/atoms/IDefaultValueProps";
+import { useStringUtilities } from '../../../../hooks/useStringUtilities';
 
 const originalStyle: React.CSSProperties = {
   height: 25,
@@ -17,17 +18,22 @@ const originalStyle: React.CSSProperties = {
 };
 
 const DefaultValueView: React.FC<DefaultValueViewProps> = (props) => {
+  const stringUtilities = useStringUtilities();
   const isSelected = props.selected?.fPath === props.fPath;
 
   return (
     <Tag
-      style={{ ...originalStyle, color: isSelected ? "white" : "initial" }}
+      style={{
+        ...originalStyle,
+        width: `${stringUtilities.trim(props.fieldname, 25).length + 2}ch`,
+        color: (isSelected || props.isSelecting) ? "white" : "initial"
+      }}
       defaultValue={props.defaultValue}
       onDoubleClick={() => {
         props.onDoubleClick({ update: { isDefaultValueEdit: true } });
       }}
     >
-      {props.defaultValue}
+      {stringUtilities.trim(props.defaultValue, 25)}
     </Tag>
   );
 };

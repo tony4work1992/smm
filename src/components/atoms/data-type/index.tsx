@@ -70,7 +70,10 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
 
   return (
     <Tag
-      style={{ ...originalStyle, color: isSelected ? "white" : "initial" }}
+      style={{
+        ...originalStyle,
+        color: (isSelected || props.isSelecting) ? "white" : "initial"
+      }}
       key={`${props.datatype}_${props.fPath}`}
     >
       <Dropdown

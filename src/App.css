@@ -1,5 +1,5 @@
 #root {
-  max-width: 1920px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -53,11 +53,11 @@
   width: 5px;
 }
 
- ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: white;
 }
 
- ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: lightgray;
   border-radius: 10px;
 }

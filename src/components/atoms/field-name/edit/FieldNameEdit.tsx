@@ -36,8 +36,8 @@ const FieldNameEdit: React.FC<FieldNameEditProps> = (props) => {
           e.preventDefault();
           props.cancel({
             update: {
-              defaultValue: props.fieldname || "",
-              isDefaultValueEdit: false,
+              fieldname: props.fieldname || "",
+              isFieldEdit: false,
             },
           });
         }

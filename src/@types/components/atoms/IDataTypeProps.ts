@@ -22,5 +22,6 @@ export interface IDataTypeProps extends ILevelObject {
   hide?: boolean;
   open?: boolean;
   selected?: ILevelObject;
+  isSelecting?: boolean;
   onChange: (params: IEventPayload) => void;
 }

@@ -21,52 +21,50 @@ const DefaultValueEdit: React.FC<DefaultValueEditProps> = (props) => {
   const selfRef = useAutoFocus();
   const datatype = props.datatype?.toLocaleLowerCase();
 
-  const menus: MenuProps["items"] = React.useMemo(() => {
-    return [
-      {
-        key: "null",
-        label: "NULL",
-        icon: <SettingOutlined style={{ paddingTop: 2 }} />,
-        extra: "⌘N",
-        onClick: (e) => {
-          props.confirm({
-            update: {
-              defaultValue: e.key || "",
-              isDefaultValueEdit: false,
-            },
-          });
-        },
+  const menus: MenuProps["items"] = [
+    {
+      key: "null",
+      label: "NULL",
+      icon: <SettingOutlined style={{ paddingTop: 2 }} />,
+      extra: "⌘N",
+      onClick: (e) => {
+        props.confirm({
+          update: {
+            defaultValue: e.key || "",
+            isDefaultValueEdit: false,
+          },
+        });
       },
-      {
-        key: "true",
-        label: "true",
-        icon: <SettingOutlined style={{ paddingTop: 2 }} />,
-        extra: "⌘T",
-        onClick: (e) => {
-          props.confirm({
-            update: {
-              defaultValue: e.key || "",
-              isDefaultValueEdit: false,
-            },
-          });
-        },
+    },
+    {
+      key: "true",
+      label: "true",
+      icon: <SettingOutlined style={{ paddingTop: 2 }} />,
+      extra: "⌘T",
+      onClick: (e) => {
+        props.confirm({
+          update: {
+            defaultValue: e.key || "",
+            isDefaultValueEdit: false,
+          },
+        });
       },
-      {
-        key: "false",
-        label: "false",
-        icon: <SettingOutlined style={{ paddingTop: 2 }} />,
-        extra: "⌘F",
-        onClick: (e) => {
-          props.confirm({
-            update: {
-              defaultValue: e.key || "",
-              isDefaultValueEdit: false,
-            },
-          });
-        },
+    },
+    {
+      key: "false",
+      label: "false",
+      icon: <SettingOutlined style={{ paddingTop: 2 }} />,
+      extra: "⌘F",
+      onClick: (e) => {
+        props.confirm({
+          update: {
+            defaultValue: e.key || "",
+            isDefaultValueEdit: false,
+          },
+        });
       },
-    ];
-  }, [props.datatype]);
+    },
+  ];
 
   if (["string", "number"].includes(datatype)) {
     return (

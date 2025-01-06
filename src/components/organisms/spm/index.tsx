@@ -1,14 +1,15 @@
+import { Button, Flex, List, Popover } from "antd";
 import React from "react";
-import { IPathMapperData, SmartPathMapperProps } from "./types/StateTypes";
+import { IPathSelectProps } from "../../../@types/components/atoms/IPathSelectProps";
 import { usePathOptionsManager } from "../../../hooks/usePathMapper/usePathOptionsManager";
 import FieldPathMolecule from "../../molecules/field-path";
-import { List } from "antd";
-import { IPathSelectProps } from "../../../@types/components/atoms/IPathSelectProps";
+import { IPathMapperData, SmartPathMapperProps } from "./types/StateTypes";
 
 // CSS Properties
 const itemListStyle: React.CSSProperties = {
   height: 26,
   padding: "0px 0px",
+  width: 500,
   color: "#0f6fac",
   borderBottom: "1px dashed rgb(114 162 192)",
   fontWeight: "bold",
@@ -46,12 +47,25 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
           return;
         }
       }}
-      style={{ marginLeft: 25, marginRight: 25 }}
+      style={{ display: "flex", flexDirection: "column" }}
     >
+      <Flex
+        style={{
+          marginBottom: 10,
+          border: '1px dashed blue',
+          padding: 5,
+          borderRadius: 5,
+          background: 'aliceblue'
+        }}>
+        <Popover title={"This is the help"} trigger={"click"} showArrow placement="bottomLeft">
+          <Button color="primary" variant="outlined" style={{ width: 100 }}>
+            Wiki
+          </Button>
+        </Popover>
+      </Flex>
       <List
         style={{
           border: "2px solid #0f6fac",
-          width: 500,
           height: 1000,
           overflow: "scroll",
         }}
@@ -78,7 +92,7 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
                     onChange: (params) => {
                       // Insert logic here
                     },
-                    onSearch: () => {},
+                    onSearch: () => { },
                   },
                 }}
                 toModel={{
@@ -87,7 +101,7 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
                     onChange: (params) => {
                       // Insert logic here
                     },
-                    onSearch: () => {},
+                    onSearch: () => { },
                   },
                 }}
               />

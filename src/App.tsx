@@ -1,9 +1,10 @@
+import { Flex } from 'antd';
 import React from "react";
+import { IInputModelTree } from "./@types/IInputModelTree";
 import "./App.css";
 import SmartModelVisualizer from "./components/organisms/smv";
 import SmartPathMapper from "./components/organisms/spm";
 import { IPathMapperData } from "./components/organisms/spm/types/StateTypes";
-import { IInputModelTree } from "./@types/IInputModelTree";
 
 const data = {
   user: {
@@ -132,7 +133,8 @@ const App: React.FC = () => {
   const [toModel, setToModel] = React.useState<IInputModelTree[]>([]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
+    // <div style={{ display: "flex", flexDirection: "row" }}>
+    <Flex gap={10}>
       <SmartModelVisualizer
         data={data}
         onModelChange={(params) => {
@@ -154,7 +156,7 @@ const App: React.FC = () => {
           setToModel(params.data);
         }}
       />
-    </div>
+    </Flex>
   );
 };
 

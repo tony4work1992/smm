@@ -39,7 +39,7 @@ const FieldNameView: React.FC<FieldNameViewProps> = (props) => {
         style={{
           ...originalStyle,
           width: `${stringUtilities.trim(props.fieldname).length + 2}ch`,
-          color: isSelected ? "white" : "initial",
+          color: (isSelected || props.isSelecting) ? "white" : "initial"
         }}
       />
     </Tag>

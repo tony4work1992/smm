@@ -134,7 +134,7 @@ const App: React.FC = () => {
 
   return (
     // <div style={{ display: "flex", flexDirection: "row" }}>
-    <Flex gap={10}>
+    <Flex gap={10} style={{ padding: 10, border: '3px solid #0783d3', borderRadius: 5 }}>
       <SmartModelVisualizer
         data={data}
         onModelChange={(params) => {
@@ -146,7 +146,7 @@ const App: React.FC = () => {
         fromModel={fromModel}
         toModel={toModel}
         onPathUpdate={function (data: IPathMapperData[]): void {
-          // Insert logic here
+          console.log(data)
           throw new Error("Function not implemented.");
         }}
       />

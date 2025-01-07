@@ -9,7 +9,6 @@ import { IPathMapperData, SmartPathMapperProps } from "./types/StateTypes";
 const itemListStyle: React.CSSProperties = {
   height: 26,
   padding: "0px 0px",
-  width: 500,
   color: "#0f6fac",
   borderBottom: "1px dashed rgb(114 162 192)",
   fontWeight: "bold",
@@ -47,7 +46,7 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
           return;
         }
       }}
-      style={{ display: "flex", flexDirection: "column" }}
+      style={{ display: "flex", flexDirection: "column", width: '20%' }}
     >
       <Flex
         style={{
@@ -90,7 +89,7 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
                   ...fromPathModel,
                   events: {
                     onChange: (params) => {
-                      // Insert logic here
+                      console.log(params);
                     },
                     onSearch: () => { },
                   },
@@ -99,7 +98,7 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
                   ...toPathModel,
                   events: {
                     onChange: (params) => {
-                      // Insert logic here
+                      console.log(params);
                     },
                     onSearch: () => { },
                   },

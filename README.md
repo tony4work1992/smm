@@ -30,21 +30,36 @@ export default tseslint.config({
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
 ```js
-// eslint.config.js
-import react from "eslint-plugin-react";
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: "18.3" } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-  },
-});
+const App: React.FC = () => {
+  const [fromModel, setFromModel] = React.useState<IInputModelTree[]>([]);
+  const [toModel, setToModel] = React.useState<IInputModelTree[]>([]);
+
+  return (
+    // <div style={{ display: "flex", flexDirection: "row" }}>
+    <Flex gap={10} style={{ padding: 10, border: '3px solid #0783d3', borderRadius: 5 }}>
+      <SmartModelVisualizer
+        data={data}
+        onModelChange={(params) => {
+          setFromModel(params.data);
+        }}
+      />
+      <SmartPathMapper
+        data={mappedPaths}
+        fromModel={fromModel}
+        toModel={toModel}
+        onPathUpdate={function (data: IPathMapperData[]): void {
+          console.log(data)
+          throw new Error("Function not implemented.");
+        }}
+      />
+      <SmartModelVisualizer
+        data={data}
+        onModelChange={(params) => {
+          setToModel(params.data);
+        }}
+      />
+    </Flex>
+  );
+};
 ```

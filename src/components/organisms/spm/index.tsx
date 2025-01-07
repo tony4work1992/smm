@@ -1,7 +1,8 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Flex, List, Popover } from "antd";
+import { List } from "antd";
 import * as _ from 'lodash';
 import React from "react";
+import { useClickAway } from 'react-use';
+import { PanelTypes } from '../../../@constants/panels/PanelTypes';
 import { usePathOptionsManager } from "../../../hooks/usePathMapper/usePathOptionsManager";
 import { IPathMapperData, IPathSelectProps, SmartPathMapperProps } from "../../../types";
 import FieldPathMolecule from "../../molecules/field-path";
@@ -31,6 +32,16 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
   const [selectedField, setSelectedField] = React.useState<IPathMapperData>();
   // Path Options Manager
   const pathOptionsManager = usePathOptionsManager();
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+
+  useClickAway(containerRef, () => {
+    if (!selectedField) {
+      return;
+    }
+    props.setActivePanel(PanelTypes.NONE)
+    setSelectedField(undefined);
+  });
 
   const fromPathOptions = React.useMemo(() => {
     return pathOptionsManager.build(props.fromModel);
@@ -64,51 +75,26 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
     }
   }
 
+  const addNewPathMapping = () => {
+    const newState = [...state, defaultData];
+    setState(newState)
+  }
+
   return (
     <div
+      ref={containerRef}
       id={"smart-model-mapper"}
       role="menuitem"
       tabIndex={0}
+      onFocus={() => props.setActivePanel(props.panelType)}
       onKeyUp={(e) => {
         if (e.altKey && e.code === "Equal") {
-          const newState = [...state, defaultData];
-          setState(newState)
+          e.preventDefault()
+          addNewPathMapping();
         }
       }}
       style={{ display: "flex", flexDirection: "column", width: '20%' }}
     >
-      <Flex
-        justify="space-between"
-        style={{
-          marginBottom: 10,
-          border: "1px dashed blue",
-          padding: 5,
-          borderRadius: 5,
-          background: "aliceblue",
-        }}
-      >
-        <Popover
-          title={"This is the help"}
-          trigger={"click"}
-          showArrow
-          placement="bottomLeft"
-        >
-          <Button color="primary" variant="outlined" style={{ width: 100 }}>
-            Wiki
-          </Button>
-        </Popover>
-        <Button
-          color="primary"
-          variant="outlined"
-          shape="circle"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            const newState = [...state, defaultData];
-            setState(newState)
-          }}
-        >
-        </Button>
-      </Flex>
       <List
         style={{
           border: "2px solid #0f6fac",

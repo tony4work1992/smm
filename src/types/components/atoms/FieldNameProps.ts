@@ -5,7 +5,7 @@ export interface FieldNameViewProps extends ILevelObject {
   hide?: boolean;
   selected?: ILevelObject;
   isSelecting?: boolean;
-  onDoubleClick: (params: IEventPayload) => void;
+  onFieldNameDoubleClick: () => void;
 }
 
 export interface FieldNameEditProps {
@@ -13,5 +13,5 @@ export interface FieldNameEditProps {
   fPath: string;
   hide?: boolean;
   confirm: (params: IEventPayload) => void;
-  cancel: (params: IEventPayload) => void;
+  cancel: () => void;
 }

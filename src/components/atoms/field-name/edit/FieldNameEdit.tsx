@@ -34,12 +34,7 @@ const FieldNameEdit: React.FC<FieldNameEditProps> = (props) => {
       onKeyUp={(e) => {
         if (e.code === "Escape") {
           e.preventDefault();
-          props.cancel({
-            update: {
-              fieldname: props.fieldname || "",
-              isFieldEdit: false,
-            },
-          });
+          props.cancel();
         }
       }}
       onBlur={(e: React.FocusEvent<HTMLInputElement>) => {

@@ -1,8 +1,10 @@
-import { Button, Flex, List, Popover, Radio } from "antd";
+import { List } from "antd";
 import { flatten } from "flat";
-import { cloneDeep } from "lodash";
+import _, { cloneDeep } from "lodash";
 import React from "react";
 import { useClickAway } from "react-use";
+import { EventTypes } from '../../../@constants/event-types';
+import { PanelTypes } from '../../../@constants/panels/PanelTypes';
 import { ILevelObject } from "../../../hooks/types";
 import { useEditState } from "../../../hooks/useEditState";
 import useFocusHelper from "../../../hooks/useFocusHelper";
@@ -11,6 +13,7 @@ import { useLevelManager } from "../../../hooks/useLevelManager";
 import { IEventPayload } from "../../../types/components/atoms/IEventPayload";
 import { IData, SmartModelVisualizerProps } from "../../../types/components/organisms/ISmartModelVisualizer";
 import { IInputModelTree } from "../../../types/IInputModelTree";
+import { EventBus } from '../../../utilities/mitt';
 import FieldNodeMolecules from "../../molecules/field-node";
 
 const itemListStyle = {
@@ -31,39 +34,60 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
   const [selectedNode, setSelectedNode] = React.useState<IInputModelTree>();
   const [selectingNode, setSelectingNode] = React.useState<IInputModelTree>();
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [modelType, setModelType] = React.useState<"document" | "table">(
-    "document",
-  );
+
 
   useClickAway(containerRef, () => {
+    // Only process click away when the panel is focusing, else do nothing.
+    if (!selectedNode) {
+      return;
+    }
     setSelectedNode(undefined);
+    props.setActivePanel(PanelTypes.NONE)
   });
 
-  const onArrowUp = (params: IInputModelTree) => {
-    const nextItem = state.find((item) => item.index === params.index - 1);
+  const onArrowUp = (selectedNode: IInputModelTree) => {
+    const nextItem = state.find((item) => item.index === selectedNode.index - 1);
+
     if (nextItem) {
       setSelectedNode(nextItem);
+      EventBus.emit(EventTypes.REACT_WITH_UP, nextItem)
+      return;
     }
+    // Run when there is no longer node upper.
+    EventBus.emit(EventTypes.REACT_WITH_UP, { ...selectedNode, isFirst: true })
   };
 
-  const onArrowDown = (params: IInputModelTree) => {
-    const nextItem = state.find((item) => item.index === params.index + 1);
+  const onArrowDown = (selectedNode: IInputModelTree) => {
+    const nextItem = state.find((item) => item.index === selectedNode.index + 1);
+
     if (nextItem) {
+      EventBus.emit(EventTypes.REACT_WITH_DOWN, nextItem)
       setSelectedNode(nextItem);
+      return;
     }
+    // Run when there is no longer node below.
+    EventBus.emit(EventTypes.REACT_WITH_DOWN, { ...selectedNode, isLast: true })
   };
 
   const onArrowLeft = (_: IInputModelTree) => {
+
     const nextItem = cloneDeep(state).shift();
     if (nextItem) {
       setSelectedNode(nextItem);
+      // Always run
+      EventBus.emit(EventTypes.REACT_WITH_LEFT, { ...nextItem, isFirst: true })
+      return;
     }
   };
 
   const onArrowRight = (_: IInputModelTree) => {
+
     const nextItem = cloneDeep(state).pop();
     if (nextItem) {
       setSelectedNode(nextItem);
+      // Always run
+      EventBus.emit(EventTypes.REACT_WITH_RIGHT, { ...nextItem, isLast: true })
+      return;
     }
   };
 
@@ -85,7 +109,7 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
   };
 
   // Create new tree node based on current node indicator
-  const onNextNewNode = (params: IInputModelTree) => {
+  const addNewNode = (params: IInputModelTree) => {
     // From the top to the current selected item.
     const head = state.filter((item) => item.index <= params.index);
     // the children of the selected node.
@@ -94,7 +118,6 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
         item.fPath !== params.fPath && item.fPath.startsWith(params.fPath),
     );
     const post = head.concat(middle);
-    console.log(head.concat(middle).map((item) => item.fPath));
 
     const tail = state
       .filter((item) => item.index > post.length - 1)
@@ -127,7 +150,7 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
     if (state.length <= 1) {
       return;
     }
-    const newState = state
+    const newState = _.cloneDeep(state)
       .filter((item) => {
         const isDeleteItem = item.index === params.index;
         const isChild =
@@ -147,6 +170,63 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
     }
   };
 
+  const onEditField = (selectedNode: IInputModelTree) => {
+    editState.enableEditMode();
+    const newState = state.map((item) => {
+      if (item.index === selectedNode.index) {
+        return { ...item, isFieldEdit: true };
+      }
+      return item;
+    });
+
+    EventBus.emit(EventTypes.REACT_WITH_EDIT_FIELD, { ...selectedNode, isFieldEdit: true })
+    setState(newState);
+    onModelChange({ item: selectedNode, data: newState });
+  }
+
+  const onEditDefaultValue = (selectedNode: IInputModelTree) => {
+    /** @NOTE If data type is object, then do not allow to modify default value. */
+    if (["Object", "List"].includes(selectedNode?.datatype || '')) {
+      return;
+    }
+    editState.enableEditMode();
+    const newState = state.map((item) => {
+      if (item.index === selectedNode.index) {
+        return { ...item, isDefaultValueEdit: true };
+      }
+      return item;
+    });
+    EventBus.emit(EventTypes.REACT_WITH_EDIT_DEFAULT_VALUE, { ...selectedNode, isDefaultValueEdit: true })
+    setState(newState);
+  }
+
+  const onCancelEditing = (selectedNode: IInputModelTree) => {
+    const newState = state.map((item) => {
+      if (item.index !== selectedNode.index) {
+        return item;
+      }
+      return { ...item, isDefaultValueEdit: false, isFieldEdit: false };
+    });
+    editState.disableEditMode();
+    EventBus.emit(EventTypes.REACT_WITH_CANCEL, { ...selectedNode, isDefaultValueEdit: false, isFieldEdit: false })
+    setState(newState);
+    focusField.focus();
+  }
+
+  const onConfirmEditing = (params: IEventPayload) => {
+    const newState = state.map((item) => {
+      if (item.index !== selectedNode?.index) {
+        return item;
+      }
+      EventBus.emit(EventTypes.REACT_WITH_CONFIRM, { ...item, ...params.update })
+      return { ...item, ...params.update };
+    });
+    setState(newState);
+    editState.disableEditMode();
+    focusField.focus();
+    onModelChange({ item: selectedNode, data: newState });
+  }
+
   React.useEffect(() => {
     if (!props.data) {
       return;
@@ -158,6 +238,65 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
     onModelChange({ item: treeData[0], data: treeData });
     setState(treeData);
   }, []);
+
+  React.useEffect(() => {
+
+    const handleArrowUp = () => {
+      if (selectedNode) onArrowUp(selectedNode);
+    }
+    EventBus.on(EventTypes.UP, handleArrowUp);
+
+    const handleArrowDown = () => {
+      if (selectedNode) onArrowDown(selectedNode);
+    }
+    EventBus.on(EventTypes.DOWN, handleArrowDown);
+
+    const handleArrowLeft = () => {
+      if (selectedNode) onArrowLeft(selectedNode);
+    }
+    EventBus.on(EventTypes.LEFT, handleArrowLeft);
+
+    const handleArrowRight = () => {
+      if (selectedNode) onArrowRight(selectedNode);
+    }
+    EventBus.on(EventTypes.RIGHT, handleArrowRight);
+
+
+    const handleAddNode = () => {
+      if (selectedNode) addNewNode(selectedNode);
+    }
+    EventBus.on(EventTypes.ADD, handleAddNode);
+
+    const handleDeleteNode = () => {
+      if (selectedNode) onDelete(selectedNode);
+    }
+    EventBus.on(EventTypes.DELETE, handleDeleteNode);
+
+    const handleEditField = () => {
+      if (selectedNode) onEditField(selectedNode);
+    }
+    EventBus.on(EventTypes.EDIT_FIELD, handleEditField);
+
+    const handleEditDefaultValue = () => {
+      if (selectedNode) onEditDefaultValue(selectedNode);
+    }
+    EventBus.on(EventTypes.EDIT_DEFAULT_VALUE, handleEditDefaultValue);
+
+    const handleCancelEditing = () => {
+      if (selectedNode) onCancelEditing(selectedNode);
+    }
+    EventBus.on(EventTypes.CANCEL, handleCancelEditing);
+
+    return () => {
+      EventBus.off(EventTypes.UP, handleArrowUp);
+      EventBus.off(EventTypes.DOWN, handleArrowDown);
+      EventBus.off(EventTypes.LEFT, handleArrowLeft);
+      EventBus.off(EventTypes.RIGHT, handleArrowRight);
+      EventBus.off(EventTypes.ADD, handleAddNode);
+      EventBus.off(EventTypes.DELETE, handleDeleteNode);
+    };
+    // @Note: Always takes 2 dependencies, because they change when doing actions.
+  }, [selectedNode?.fPath, state.length])
 
   const renderItem = (item: IInputModelTree) => {
     let focusedStyle: React.CSSProperties = {};
@@ -178,9 +317,17 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
       <List.Item
         key={item.fPath}
         onClick={() => {
+          props.setActivePanel(props.panelType)
+          const isFirst = state[0]?.index === item.index;
+          const isLast = state[state.length - 1]?.index === item.index;
+          EventBus.emit(EventTypes.REACT_WITH_CLICK, { ...selectedNode, isLast, isFirst })
           setSelectedNode({ ...item });
         }}
         onContextMenu={() => {
+          props.setActivePanel(props.panelType)
+          const isFirst = state[0]?.index === item.index;
+          const isLast = state[state.length - 1]?.index === item.index;
+          EventBus.emit(EventTypes.REACT_WITH_CLICK, { ...selectedNode, isLast, isFirst })
           setSelectedNode({ ...item });
         }}
         style={{ ...focusedStyle, ...itemListStyle }}
@@ -209,39 +356,25 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
             });
             setState(newState);
           }}
-          onDoubleClick={(params: IEventPayload) => {
-            const newState = state.map((item) => {
-              if (item.index !== selectedNode?.index) {
-                return item;
-              }
-              return { ...item, ...params.update };
-            });
-            editState.enableEditMode();
-            setState(newState);
+          onFieldNameDoubleClick={() => {
+            if (selectedNode) {
+              onEditField(selectedNode)
+            }
           }}
-          cancel={(params: IEventPayload) => {
-            const newState = state.map((item) => {
-              if (item.index !== selectedNode?.index) {
-                return item;
-              }
-              return { ...item, ...params.update };
-            });
-            editState.disableEditMode();
-            setState(newState);
-            focusField.focus();
+          onDefaultValueDoubleClick={() => {
+            if (selectedNode) {
+              onEditDefaultValue(selectedNode)
+            }
+          }}
+          cancel={() => {
+            if (selectedNode) {
+              onCancelEditing(selectedNode);
+            }
           }}
           confirm={(params: IEventPayload) => {
-            const newState = state.map((item) => {
-              if (item.index !== selectedNode?.index) {
-                return item;
-              }
-              return { ...item, ...params.update };
-            });
-            setState(newState);
-            editState.disableEditMode();
-            focusField.focus();
-
-            onModelChange({ item: selectedNode, data: newState });
+            if (selectedNode) {
+              onConfirmEditing(params);
+            }
           }}
         />
       </List.Item>
@@ -253,12 +386,13 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
       tabIndex={0} // Make div focusable
       role="menuitem"
       ref={containerRef}
+      onFocus={() => props.setActivePanel(props.panelType)}
       onKeyUp={(e) => {
         if (editState.isEditing()) {
           return;
         }
         if (e.altKey && selectedNode && e.code === "Equal") {
-          onNextNewNode(selectedNode);
+          addNewNode(selectedNode);
           return;
         }
         if (e.altKey && selectedNode && e.code === "Minus") {
@@ -287,31 +421,13 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
         }
         if (e.code === "KeyF" && selectedNode) {
           e.preventDefault();
-          editState.enableEditMode();
-          const newState = state.map((item) => {
-            if (item.index === selectedNode.index) {
-              return { ...item, isFieldEdit: true };
-            }
-            return item;
-          });
-          setState(newState);
-          onModelChange({ item: selectedNode, data: newState });
+          onEditField(selectedNode)
           return;
         }
         if (e.code === "KeyD" && selectedNode) {
-          /** @NOTE If data type is object, then do not allow to modify default value. */
-          if (selectedNode.datatype === "Object") {
-            return;
-          }
           e.preventDefault();
-          editState.enableEditMode();
-          const newState = state.map((item) => {
-            if (item.index === selectedNode.index) {
-              return { ...item, isDefaultValueEdit: true };
-            }
-            return item;
-          });
-          setState(newState);
+          onEditDefaultValue(selectedNode)
+          return;
         }
       }}
       style={{
@@ -321,48 +437,7 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
         width: "40%",
       }} // Remove default focus outline
     >
-      <Flex
-        gap={10}
-        align="center"
-        style={{
-          marginBottom: 10,
-          border: "1px dashed blue",
-          padding: 5,
-          borderRadius: 5,
-          background: "aliceblue",
-        }}
-      >
-        <Popover
-          title={
-            <>
-              <p>
-                (Alt + =) : Add a new field at the level of selecting field.
-              </p>
-              <p>(Alt + -): Delete the current field.</p>
-              <p>(Alt + F): Edit field name the current field.</p>
-              <p>(Alt + D): Edit default value the current field.</p>
-              <p>@Note: Field with datatype object can't edit default value </p>
-            </>
-          }
-          trigger={"click"}
-          showArrow
-          placement="bottomLeft"
-        >
-          <Button color="primary" variant="dashed" style={{ width: 100 }}>
-            Wiki
-          </Button>
-        </Popover>
-        <Radio.Group
-          onChange={(e) => {
-            setModelType(e.target.value);
-          }}
-          value={modelType}
-          buttonStyle="solid"
-        >
-          <Radio.Button value={"document"}>Document</Radio.Button>
-          <Radio.Button value={"table"}>Table</Radio.Button>
-        </Radio.Group>
-      </Flex>
+
       <List
         style={{
           border: "2px solid #0f6fac",

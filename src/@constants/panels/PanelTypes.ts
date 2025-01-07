@@ -1,0 +1,6 @@
+export enum PanelTypes {
+    NONE = 'NONE',
+    SOURCE_MODEL = 'SOURCE_MODEL',
+    PATH_MAPPER = 'PATH_MAPPER',
+    DESTINATION_MODEL = 'DESTINATION_MODEL',
+}

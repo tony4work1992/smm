@@ -30,7 +30,7 @@ const DefaultValueView: React.FC<DefaultValueViewProps> = (props) => {
       }}
       defaultValue={props.defaultValue}
       onDoubleClick={() => {
-        props.onDoubleClick({ update: { isDefaultValueEdit: true } });
+        props.onDefaultValueDoubleClick();
       }}
     >
       {stringUtilities.trim(props.defaultValue, 25)}

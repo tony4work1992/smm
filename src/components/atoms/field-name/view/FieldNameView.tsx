@@ -28,7 +28,7 @@ const FieldNameView: React.FC<FieldNameViewProps> = (props) => {
       style={{ ...originalStyle, color: isSelected ? "white" : "initial" }}
       defaultValue={props.fieldname}
       onDoubleClick={() => {
-        props.onDoubleClick({ update: { isFieldEdit: true } });
+        props.onFieldNameDoubleClick();
       }}
     >
       <FormOutlined style={{ ...originalStyle, paddingRight: 2 }} />

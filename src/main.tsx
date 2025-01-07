@@ -3,8 +3,130 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./SmartModelMapper.tsx";
 
+const data = {
+  user: {
+    metadata: {
+      datatype: "Object",
+      fieldname: "user",
+      defaultValue: "",
+    },
+    fields: {
+      personal: {
+        metadata: {
+          datatype: "Object",
+          fieldname: "personal",
+          defaultValue: "",
+        },
+        fields: {
+          name: {
+            metadata: {
+              datatype: "String",
+              fieldname: "name",
+              defaultValue: "Anonymous",
+            },
+            fields: {},
+          },
+          age: {
+            metadata: {
+              datatype: "Number",
+              fieldname: "age",
+              defaultValue: "0",
+            },
+            fields: {},
+          },
+        },
+      },
+      contact: {
+        metadata: {
+          datatype: "Object",
+          fieldname: "contact",
+          defaultValue: "",
+        },
+        fields: {
+          email: {
+            metadata: {
+              datatype: "String",
+              fieldname: "email",
+              defaultValue: "example@example.com",
+            },
+            fields: {},
+          },
+          phone: {
+            metadata: {
+              datatype: "Object",
+              fieldname: "phone",
+              defaultValue: "000-000-0000",
+            },
+            fields: {
+              personal: {
+                metadata: {
+                  datatype: "Object",
+                  fieldname: "personal",
+                  defaultValue: "",
+                },
+                fields: {
+                  name: {
+                    metadata: {
+                      datatype: "String",
+                      fieldname: "name",
+                      defaultValue: "Anonymous",
+                    },
+                    fields: {},
+                  },
+                  age: {
+                    metadata: {
+                      datatype: "Number",
+                      fieldname: "age",
+                      defaultValue: "0",
+                    },
+                    fields: {},
+                  },
+                },
+              },
+              contact: {
+                metadata: {
+                  datatype: "Object",
+                  fieldname: "contact",
+                  defaultValue: "",
+                },
+                fields: {
+                  email: {
+                    metadata: {
+                      datatype: "String",
+                      fieldname: "email",
+                      defaultValue: "example@example.com",
+                    },
+                    fields: {},
+                  },
+                  phone: {
+                    metadata: {
+                      datatype: "String",
+                      fieldname: "phone",
+                      defaultValue: "000-000-0000",
+                    },
+                    fields: {},
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+// Mapped paths for from and to model
+const mappedPaths = [
+  {
+    from: { fPath: "user.personal.name" },
+    to: { fPath: "user.personal.name" },
+  },
+  { from: { fPath: "user.personal.age" }, to: { fPath: "user.personal.age" } },
+];
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <App from={data} to={data} mapping={mappedPaths} />
   </StrictMode>,
 );

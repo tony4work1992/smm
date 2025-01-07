@@ -11,4 +11,5 @@ export * from './components/organisms/ISmartModelVisualizer';
 export * from './components/organisms/ISmartPathMapper';
 export * from './IInputModelTree';
 export * from './IMetaData';
+export * from './ISmartModelMapperProps';
 

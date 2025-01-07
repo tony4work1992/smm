@@ -87,12 +87,7 @@ const DefaultValueEdit: React.FC<DefaultValueEditProps> = (props) => {
         onKeyUp={(e) => {
           if (e.code === "Escape") {
             e.preventDefault();
-            props.cancel({
-              update: {
-                defaultValue: props.defaultValue || "",
-                isDefaultValueEdit: false,
-              },
-            });
+            props.cancel();
           }
         }}
         onBlur={(e: React.FocusEvent<HTMLInputElement>) => {

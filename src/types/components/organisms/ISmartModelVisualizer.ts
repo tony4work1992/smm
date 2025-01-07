@@ -1,3 +1,4 @@
+import { PanelTypes } from '../../../@constants/panels/PanelTypes';
 import { IMetaData } from "../../IMetaData";
 
 export interface IValueData {
@@ -10,6 +11,8 @@ export interface IData {
 
 export interface SmartModelVisualizerProps<T> {
     data: IData;
+    panelType: PanelTypes;
+    setActivePanel: React.Dispatch<React.SetStateAction<PanelTypes>>;
     onModelChange?: (params: {
         item: T;
         data: T[];

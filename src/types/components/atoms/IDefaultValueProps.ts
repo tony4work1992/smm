@@ -7,7 +7,7 @@ export interface DefaultValueViewProps extends ILevelObject {
   hide?: boolean;
   selected?: ILevelObject;
   isSelecting?: boolean;
-  onDoubleClick: (params: IEventPayload) => void;
+  onDefaultValueDoubleClick: () => void;
 }
 
 export interface DefaultValueEditProps {
@@ -16,5 +16,5 @@ export interface DefaultValueEditProps {
   fPath: string;
   hide?: boolean;
   confirm: (params: IEventPayload) => void;
-  cancel: (params: IEventPayload) => void;
+  cancel: () => void;
 }

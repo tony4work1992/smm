@@ -1,3 +1,4 @@
+import { PanelTypes } from '../../../@constants/panels/PanelTypes';
 import { IInputModelTree } from "../../../types/IInputModelTree";
 
 export interface IPathMapperData {
@@ -11,6 +12,8 @@ export interface IPathMapperData {
 
 export interface SmartPathMapperProps {
     fromModel: IInputModelTree[];
+    panelType: PanelTypes;
+    setActivePanel: React.Dispatch<React.SetStateAction<PanelTypes>>;
     toModel: IInputModelTree[];
     data: IPathMapperData[];
     onPathUpdate: (data: IPathMapperData[]) => void;

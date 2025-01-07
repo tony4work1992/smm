@@ -1,8 +1,8 @@
 import { FormOutlined } from "@ant-design/icons";
 import { Input, Tag } from "antd";
 import React from "react";
-import { FieldNameViewProps } from "../../../../@types/components/atoms/FieldNameProps";
 import { useStringUtilities } from "../../../../hooks/useStringUtilities";
+import { FieldNameViewProps } from "../../../../types/components/atoms/FieldNameProps";
 
 const originalStyle: React.CSSProperties = {
   height: 25,
@@ -39,7 +39,7 @@ const FieldNameView: React.FC<FieldNameViewProps> = (props) => {
         style={{
           ...originalStyle,
           width: `${stringUtilities.trim(props.fieldname).length + 2}ch`,
-          color: (isSelected || props.isSelecting) ? "white" : "initial"
+          color: isSelected || props.isSelecting ? "white" : "initial",
         }}
       />
     </Tag>

@@ -1,4 +1,4 @@
-import { IMetaData } from "../@types/IMetaData";
+import { IMetaData } from "../types/IMetaData";
 import useFocusHelper from "./useFocusHelper";
 import useInputDataManager from "./useInputDataManager";
 import useModelProcessor from "./useModelProcessor";

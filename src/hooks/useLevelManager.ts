@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import React from "react";
-import { IInputModelTree } from "../@types/IInputModelTree";
+import { IInputModelTree } from "../types/IInputModelTree";
 import useModelProcessor from "./useModelProcessor";
 
 export const useLevelManager = () => {

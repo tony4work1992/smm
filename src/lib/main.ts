@@ -1,6 +1,12 @@
-export type { IInputModelTree } from './../@types/IInputModelTree';
+export * from '../types';
+import SmartModelMapper from '../SmartModelMapper';
+import SmartModelVisualizer from '../components/organisms/smv';
+import SmartPathVisualizer from '../components/organisms/spm';
+
 export {
-    App
+    SmartModelVisualizer,
+    SmartPathVisualizer
 };
-import App from './../App';
+
+export default SmartModelMapper;
 

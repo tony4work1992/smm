@@ -1,10 +1,10 @@
-import { Flex } from 'antd';
+import { Flex } from "antd";
 import React from "react";
-import { IInputModelTree } from "./@types/IInputModelTree";
-import "./App.css";
+import "./SmartModelMapper.css";
 import SmartModelVisualizer from "./components/organisms/smv";
 import SmartPathMapper from "./components/organisms/spm";
-import { IPathMapperData } from "./components/organisms/spm/types/StateTypes";
+import { IPathMapperData } from './types';
+import { IInputModelTree } from "./types/IInputModelTree";
 
 const data = {
   user: {
@@ -128,13 +128,13 @@ const mappedPaths = [
   { from: { fPath: "user.personal.age" }, to: { fPath: "user.personal.age" } },
 ];
 
-const App: React.FC = () => {
+const SmartModelMapper: React.FC = () => {
   const [fromModel, setFromModel] = React.useState<IInputModelTree[]>([]);
   const [toModel, setToModel] = React.useState<IInputModelTree[]>([]);
 
   return (
     // <div style={{ display: "flex", flexDirection: "row" }}>
-    <Flex gap={10} style={{ padding: 10, border: '3px solid #0783d3', borderRadius: 5 }}>
+    <Flex gap={10} style={{ padding: 10, border: '2px solid #4848d3', borderRadius: 5 }}>
       <SmartModelVisualizer
         data={data}
         onModelChange={(params) => {
@@ -145,8 +145,9 @@ const App: React.FC = () => {
         data={mappedPaths}
         fromModel={fromModel}
         toModel={toModel}
-        onPathUpdate={function (data: IPathMapperData[]): void {
+        onPathUpdate={(data: IPathMapperData[]) => {
           console.log(data)
+          // Insert logic here
           throw new Error("Function not implemented.");
         }}
       />
@@ -160,4 +161,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default SmartModelMapper;

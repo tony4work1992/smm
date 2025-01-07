@@ -1,7 +1,7 @@
 import { Tag } from "antd";
 import React from "react";
-import { DefaultValueViewProps } from "../../../../@types/components/atoms/IDefaultValueProps";
-import { useStringUtilities } from '../../../../hooks/useStringUtilities';
+import { useStringUtilities } from "../../../../hooks/useStringUtilities";
+import { DefaultValueViewProps } from "../../../../types/components/atoms/IDefaultValueProps";
 
 const originalStyle: React.CSSProperties = {
   height: 25,
@@ -26,7 +26,7 @@ const DefaultValueView: React.FC<DefaultValueViewProps> = (props) => {
       style={{
         ...originalStyle,
         width: `${stringUtilities.trim(props.fieldname, 25).length + 2}ch`,
-        color: (isSelected || props.isSelecting) ? "white" : "initial"
+        color: isSelected || props.isSelecting ? "white" : "initial",
       }}
       defaultValue={props.defaultValue}
       onDoubleClick={() => {

@@ -1,9 +1,9 @@
 import { Flex } from "antd";
-import { FieldNodeProps } from "../../../@types/components/molecules/IFieldNodeProps";
+import { FieldNodeProps } from "../../../types/components/molecules/IFieldNodeProps";
 import { DataTypeAtom } from "../../atoms";
 import DefaultValueEdit from "../../atoms/default-value/edit/DefaultValueEdit";
 import DefaultValueView from "../../atoms/default-value/view/DefaultValueView";
-import DeleteButton from '../../atoms/delete-button';
+import DeleteButton from "../../atoms/delete-button";
 import FieldNameEdit from "../../atoms/field-name/edit/FieldNameEdit";
 import FieldNameView from "../../atoms/field-name/view/FieldNameView";
 import IndentBlockAtom from "../../atoms/indent-block";

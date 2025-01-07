@@ -1,8 +1,8 @@
 import { SettingOutlined } from "@ant-design/icons";
 import { Dropdown, Input, MenuProps, Tag } from "antd";
 import React from "react";
-import { DefaultValueEditProps } from "../../../../@types/components/atoms/IDefaultValueProps";
 import useAutoFocus from "../../../../hooks/useAutoFocus";
+import { DefaultValueEditProps } from "../../../../types/components/atoms/IDefaultValueProps";
 
 const originalStyle: React.CSSProperties = {
   paddingLeft: 0,

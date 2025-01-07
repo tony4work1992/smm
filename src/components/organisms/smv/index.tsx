@@ -2,24 +2,16 @@ import { Button, Flex, List, Popover, Radio } from "antd";
 import { flatten } from "flat";
 import { cloneDeep } from "lodash";
 import React from "react";
-import { useClickAway } from 'react-use';
-import { IEventPayload } from "../../../@types/components/atoms/IEventPayload";
-import { IInputModelTree } from "../../../@types/IInputModelTree";
+import { useClickAway } from "react-use";
 import { ILevelObject } from "../../../hooks/types";
 import { useEditState } from "../../../hooks/useEditState";
 import useFocusHelper from "../../../hooks/useFocusHelper";
 import useInputDataManager from "../../../hooks/useInputDataManager";
 import { useLevelManager } from "../../../hooks/useLevelManager";
+import { IEventPayload } from "../../../types/components/atoms/IEventPayload";
+import { IData, SmartModelVisualizerProps } from "../../../types/components/organisms/ISmartModelVisualizer";
+import { IInputModelTree } from "../../../types/IInputModelTree";
 import FieldNodeMolecules from "../../molecules/field-node";
-import { IData } from "./types/StateTypes";
-
-interface SmartModelVisualizerProps {
-  data: IData;
-  onModelChange?: (params: {
-    item: IInputModelTree;
-    data: IInputModelTree[];
-  }) => void;
-}
 
 const itemListStyle = {
   height: 26,
@@ -29,7 +21,7 @@ const itemListStyle = {
   fontWeight: "bold",
 };
 
-const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
+const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>> = (props) => {
   const [state, setState] = React.useState<IInputModelTree[]>([]);
   const inputDataManager = useInputDataManager();
   // Focused Field
@@ -39,11 +31,13 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
   const [selectedNode, setSelectedNode] = React.useState<IInputModelTree>();
   const [selectingNode, setSelectingNode] = React.useState<IInputModelTree>();
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [modelType, setModelType] = React.useState<'document' | 'table'>('document');
+  const [modelType, setModelType] = React.useState<"document" | "table">(
+    "document",
+  );
 
   useClickAway(containerRef, () => {
-    setSelectedNode(undefined)
-  })
+    setSelectedNode(undefined);
+  });
 
   const onArrowUp = (params: IInputModelTree) => {
     const nextItem = state.find((item) => item.index === params.index - 1);
@@ -133,23 +127,25 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
     if (state.length <= 1) {
       return;
     }
-    const newState = state.filter((item) => {
-      const isDeleteItem = item.index === params.index;
-      const isChild = item.fPath !== params.fPath && item.fPath.startsWith(params.fPath);
-      return !isChild && !isDeleteItem
-    }).map((item, index) => ({ ...item, index }))
-    const prevNode = newState.find((item) => item.index === (params.index - 1));
+    const newState = state
+      .filter((item) => {
+        const isDeleteItem = item.index === params.index;
+        const isChild =
+          item.fPath !== params.fPath && item.fPath.startsWith(params.fPath);
+        return !isChild && !isDeleteItem;
+      })
+      .map((item, index) => ({ ...item, index }));
+    const prevNode = newState.find((item) => item.index === params.index - 1);
     if (prevNode) {
       setState(newState);
       /** @NOTE React Batch update mechanism is not working properly, so setTimeout here intentionally */
       setTimeout(() => {
-        setSelectedNode({ ...prevNode })
+        setSelectedNode({ ...prevNode });
         onModelChange({ item: prevNode, data: newState });
-      }, 100)
+      }, 100);
       return;
     }
-
-  }
+  };
 
   React.useEffect(() => {
     if (!props.data) {
@@ -179,7 +175,6 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
     }
 
     return (
-
       <List.Item
         key={item.fPath}
         onClick={() => {
@@ -190,17 +185,20 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
         }}
         style={{ ...focusedStyle, ...itemListStyle }}
         onMouseEnter={() => {
-          setSelectingNode({ ...item })
+          setSelectingNode({ ...item });
         }}
         onMouseLeave={() => {
-          setSelectingNode(undefined)
+          setSelectingNode(undefined);
         }}
       >
         <FieldNodeMolecules
           {...item}
           key={item.fPath}
           selected={(selectedNode || { fPath: "" }) as ILevelObject}
-          isSelecting={item.fPath === selectedNode?.fPath || selectingNode?.fPath === item.fPath}
+          isSelecting={
+            item.fPath === selectedNode?.fPath ||
+            selectingNode?.fPath === item.fPath
+          }
           delete={() => onDelete(item)}
           onChange={(params: IEventPayload) => {
             const newState = state.map((item) => {
@@ -248,7 +246,7 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
         />
       </List.Item>
     );
-  }
+  };
   return (
     <div
       id={"input-model-wrapper"}
@@ -302,7 +300,7 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
         }
         if (e.code === "KeyD" && selectedNode) {
           /** @NOTE If data type is object, then do not allow to modify default value. */
-          if (selectedNode.datatype === 'Object') {
+          if (selectedNode.datatype === "Object") {
             return;
           }
           e.preventDefault();
@@ -316,54 +314,66 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps> = (props) => {
           setState(newState);
         }
       }}
-      style={{ outline: "none", display: "flex", flexDirection: "column", width: '40%' }} // Remove default focus outline
+      style={{
+        outline: "none",
+        display: "flex",
+        flexDirection: "column",
+        width: "40%",
+      }} // Remove default focus outline
     >
-      <Flex gap={10} align='center'
+      <Flex
+        gap={10}
+        align="center"
         style={{
           marginBottom: 10,
-          border: '1px dashed blue',
+          border: "1px dashed blue",
           padding: 5,
           borderRadius: 5,
-          background: 'aliceblue'
-
-        }}>
+          background: "aliceblue",
+        }}
+      >
         <Popover
           title={
             <>
-              <p>(Alt + =) : Add a new field at the level of selecting field.</p>
+              <p>
+                (Alt + =) : Add a new field at the level of selecting field.
+              </p>
               <p>(Alt + -): Delete the current field.</p>
               <p>(Alt + F): Edit field name the current field.</p>
               <p>(Alt + D): Edit default value the current field.</p>
               <p>@Note: Field with datatype object can't edit default value </p>
             </>
-          } trigger={"click"} showArrow placement="bottomLeft">
+          }
+          trigger={"click"}
+          showArrow
+          placement="bottomLeft"
+        >
           <Button color="primary" variant="dashed" style={{ width: 100 }}>
             Wiki
           </Button>
-
         </Popover>
         <Radio.Group
           onChange={(e) => {
-            setModelType(e.target.value)
+            setModelType(e.target.value);
           }}
           value={modelType}
           buttonStyle="solid"
         >
-          <Radio.Button value={'document'}>Document</Radio.Button>
-          <Radio.Button value={'table'}>Table</Radio.Button>
+          <Radio.Button value={"document"}>Document</Radio.Button>
+          <Radio.Button value={"table"}>Table</Radio.Button>
         </Radio.Group>
       </Flex>
       <List
         style={{
           border: "2px solid #0f6fac",
-          width: '100%',
+          width: "100%",
           height: 1000,
           overflow: "scroll",
         }}
         dataSource={state}
         renderItem={renderItem}
       />
-    </div >
+    </div>
   );
 };
 

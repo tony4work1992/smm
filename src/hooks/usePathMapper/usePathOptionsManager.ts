@@ -1,12 +1,11 @@
-import React from "react";
-import { PathSelectOption } from "../../@types/components/atoms/IPathSelectProps";
-import { IInputModelTree } from "../../@types/IInputModelTree";
 import * as _ from "lodash";
+import { PathSelectOption } from "../../types/components/atoms/IPathSelectProps";
+import { IInputModelTree } from "../../types/IInputModelTree";
 
 export const usePathOptionsManager = () => {
-  const pathOptions = React.useRef<PathSelectOption[]>([]);
 
   const build = (items: IInputModelTree[]) => {
+    const pathOptions: PathSelectOption[] = [];
     _.forEach(items, (item) => {
       if (_.isNil(item.fPath)) {
         return;
@@ -16,21 +15,13 @@ export const usePathOptionsManager = () => {
         label: item.fPath,
         value: item.fPath,
       } as PathSelectOption;
-      pathOptions.current.push(option);
+      pathOptions.push(option);
     });
 
-    return pathOptions.current;
-  };
-
-  const get = () => pathOptions.current;
-
-  const reset = () => {
-    pathOptions.current.length = 0;
+    return pathOptions;
   };
 
   return {
-    build,
-    get,
-    reset,
+    build
   };
 };

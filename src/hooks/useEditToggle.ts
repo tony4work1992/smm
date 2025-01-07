@@ -1,4 +1,4 @@
-import { IInputModelTree } from "../@types/IInputModelTree";
+import { IInputModelTree } from "../types/IInputModelTree";
 import { HookReturnedParams } from "./types";
 
 /**

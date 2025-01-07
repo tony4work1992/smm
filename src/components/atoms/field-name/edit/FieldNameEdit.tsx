@@ -1,7 +1,7 @@
 import { Input } from "antd";
 import React from "react";
-import { FieldNameEditProps } from "../../../../@types/components/atoms/FieldNameProps";
 import useAutoFocus from "../../../../hooks/useAutoFocus";
+import { FieldNameEditProps } from "../../../../types/components/atoms/FieldNameProps";
 
 const tagInputStyle: React.CSSProperties = {
   paddingLeft: 0,

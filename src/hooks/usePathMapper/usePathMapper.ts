@@ -1,6 +1,5 @@
 import React from "react";
-import { IPathMapperData } from "../../components/organisms/spm/types/StateTypes";
-import * as _ from "lodash";
+import { IPathMapperData } from '../../types';
 
 const usePathMapper = () => {
   const pathMapperList = React.useRef<IPathMapperData[]>();

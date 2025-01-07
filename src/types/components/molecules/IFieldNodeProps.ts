@@ -4,7 +4,7 @@ import {
   FieldNameViewProps,
 } from "../atoms/FieldNameProps";
 import { IDataTypeProps } from "../atoms/IDataTypeProps";
-import { IDeleteButtonProps } from '../atoms/IDeleteButtonProps';
+import { IDeleteButtonProps } from "../atoms/IDeleteButtonProps";
 
 export type FieldNodeProps = {
   isFieldEdit?: boolean;
@@ -14,4 +14,5 @@ export type FieldNodeProps = {
 } & IDataTypeProps &
   FieldNameEditProps &
   FieldNameViewProps &
-  ILevelObject & IDeleteButtonProps;
+  ILevelObject &
+  IDeleteButtonProps;

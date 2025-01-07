@@ -1,7 +1,7 @@
 import { SettingOutlined } from "@ant-design/icons";
 import { Dropdown, MenuProps, Space, Tag } from "antd";
 import React from "react";
-import { IDataTypeProps } from "../../../@types/components/atoms/IDataTypeProps";
+import { IDataTypeProps } from "../../../types/components/atoms/IDataTypeProps";
 
 const originalStyle: React.CSSProperties = {
   height: 25,
@@ -72,7 +72,7 @@ const DataTypeAtom: React.FC<IDataTypeProps> = (props) => {
     <Tag
       style={{
         ...originalStyle,
-        color: (isSelected || props.isSelecting) ? "white" : "initial"
+        color: isSelected || props.isSelecting ? "white" : "initial",
       }}
       key={`${props.datatype}_${props.fPath}`}
     >

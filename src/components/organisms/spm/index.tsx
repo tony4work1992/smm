@@ -1,9 +1,10 @@
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, Flex, List, Popover } from "antd";
+import * as _ from 'lodash';
 import React from "react";
-import { IPathSelectProps } from "../../../@types/components/atoms/IPathSelectProps";
 import { usePathOptionsManager } from "../../../hooks/usePathMapper/usePathOptionsManager";
+import { IPathMapperData, IPathSelectProps, SmartPathMapperProps } from "../../../types";
 import FieldPathMolecule from "../../molecules/field-path";
-import { IPathMapperData, SmartPathMapperProps } from "./types/StateTypes";
 
 // CSS Properties
 const itemListStyle: React.CSSProperties = {
@@ -14,27 +15,54 @@ const itemListStyle: React.CSSProperties = {
   fontWeight: "bold",
 };
 
+const defaultData: IPathMapperData = {
+  from: {
+    fPath: ""
+  },
+  to: {
+    fPath: ""
+  }
+}
+
 const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
-  const [state, setState] = React.useState<IPathMapperData[]>();
+  const [state, setState] = React.useState<IPathMapperData[]>([]);
+  // Set field to be select
+  const [selectingField, setSelectingField] = React.useState<IPathMapperData>();
+  const [selectedField, setSelectedField] = React.useState<IPathMapperData>();
   // Path Options Manager
   const pathOptionsManager = usePathOptionsManager();
 
   const fromPathOptions = React.useMemo(() => {
-    pathOptionsManager.reset()
     return pathOptionsManager.build(props.fromModel);
-  }, [props.fromModel]);
+  }, [JSON.stringify(props.fromModel)]);
 
   const toPathOptions = React.useMemo(() => {
-    pathOptionsManager.reset()
     return pathOptionsManager.build(props.toModel);
-  }, [props.toModel]);
+  }, [JSON.stringify(props.toModel)]);
 
   React.useEffect(() => {
     if (!props.data) {
       return;
     }
     setState(props.data);
-  }, [props.fromModel, props.toModel]);
+  }, [JSON.stringify(props.fromModel), JSON.stringify(props.toModel)]);
+
+  const onDelete = (params: IPathMapperData) => {
+    // 1. Length <= 1 -> set to default data
+    if (state.length <= 1) {
+      setState([defaultData]);
+      return;
+    }
+
+    // 2. Length > 1 -> remove the mapped path from list mapped paths
+    const index = _.indexOf(state, params);
+
+    if (index > -1) {
+      const newState = state;
+      state.splice(index, 1);
+      setState(newState)
+    }
+  }
 
   return (
     <div
@@ -43,24 +71,43 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
       tabIndex={0}
       onKeyUp={(e) => {
         if (e.altKey && e.code === "Equal") {
-          return;
+          const newState = [...state, defaultData];
+          setState(newState)
         }
       }}
       style={{ display: "flex", flexDirection: "column", width: '20%' }}
     >
       <Flex
+        justify="space-between"
         style={{
           marginBottom: 10,
-          border: '1px dashed blue',
+          border: "1px dashed blue",
           padding: 5,
           borderRadius: 5,
-          background: 'aliceblue'
-        }}>
-        <Popover title={"This is the help"} trigger={"click"} showArrow placement="bottomLeft">
+          background: "aliceblue",
+        }}
+      >
+        <Popover
+          title={"This is the help"}
+          trigger={"click"}
+          showArrow
+          placement="bottomLeft"
+        >
           <Button color="primary" variant="outlined" style={{ width: 100 }}>
             Wiki
           </Button>
         </Popover>
+        <Button
+          color="primary"
+          variant="outlined"
+          shape="circle"
+          icon={<PlusOutlined />}
+          onClick={() => {
+            const newState = [...state, defaultData];
+            setState(newState)
+          }}
+        >
+        </Button>
       </Flex>
       <List
         style={{
@@ -82,14 +129,39 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
             <List.Item
               style={itemListStyle}
               key={`${item.from.fPath}${item.to.fPath}`}
+              onClick={() => {
+                setSelectedField({ ...item })
+              }}
+              onBlur={() => {
+                setSelectedField(undefined)
+              }}
+              onMouseEnter={() => {
+                setSelectingField({ ...item })
+              }}
+              onMouseLeave={() => {
+                setSelectingField(undefined)
+              }}
             >
               <FieldPathMolecule
                 index={index}
+                isSelecting={
+                  (item.from.fPath === selectingField?.from.fPath && item.to.fPath === selectingField?.to.fPath) ||
+                  (item.from.fPath === selectedField?.from.fPath && item.to.fPath === selectedField?.to.fPath)
+                }
+                delete={() => { onDelete(item) }}
                 fromModel={{
                   ...fromPathModel,
                   events: {
                     onChange: (params) => {
-                      console.log(params);
+                      const newState = state.map(mappedPath => {
+                        if (item.from.fPath === mappedPath.from.fPath) {
+                          mappedPath.from.fPath = params.fPath;
+                        }
+
+                        return mappedPath;
+                      })
+                      console.log('newState', newState)
+                      setState(newState);
                     },
                     onSearch: () => { },
                   },
@@ -98,7 +170,15 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
                   ...toPathModel,
                   events: {
                     onChange: (params) => {
-                      console.log(params);
+                      const newState = state.map(mappedPath => {
+                        if (item.to.fPath === mappedPath.to.fPath) {
+                          mappedPath.to.fPath = params.fPath;
+                        }
+
+                        return mappedPath;
+                      })
+
+                      setState(newState);
                     },
                     onSearch: () => { },
                   },

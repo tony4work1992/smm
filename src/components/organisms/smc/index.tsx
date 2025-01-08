@@ -29,13 +29,13 @@ const SmartModelControl: React.FC<ISmartModelControlProps> = (props) => {
         EventBus.on(EventTypes.REACT_WITH_CLICK, onNodeSelected);
 
         return () => {
-            EventBus.off(EventTypes.CANCEL, onNodeSelected);
-            EventBus.off(EventTypes.UP, onNodeSelected);
-            EventBus.off(EventTypes.DOWN, onNodeSelected);
-            EventBus.off(EventTypes.LEFT, onNodeSelected);
-            EventBus.off(EventTypes.RIGHT, onNodeSelected);
-            EventBus.off(EventTypes.EDIT_DEFAULT_VALUE, onNodeSelected);
-            EventBus.off(EventTypes.EDIT_FIELD, onNodeSelected);
+            EventBus.off(EventTypes.REACT_WITH_CANCEL, onNodeSelected);
+            EventBus.off(EventTypes.REACT_WITH_UP, onNodeSelected);
+            EventBus.off(EventTypes.REACT_WITH_DOWN, onNodeSelected);
+            EventBus.off(EventTypes.REACT_WITH_LEFT, onNodeSelected);
+            EventBus.off(EventTypes.REACT_WITH_RIGHT, onNodeSelected);
+            EventBus.off(EventTypes.REACT_WITH_EDIT_DEFAULT_VALUE, onNodeSelected);
+            EventBus.off(EventTypes.REACT_WITH_EDIT_FIELD, onNodeSelected);
             EventBus.off(EventTypes.REACT_WITH_CONFIRM, onNodeSelected);
             EventBus.off(EventTypes.REACT_WITH_CLICK, onNodeSelected);
         }

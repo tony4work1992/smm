@@ -136,7 +136,7 @@ const SmartModelControl: React.FC<ISmartModelControlProps> = (props) => {
                 <Flex gap={5}>
                     {props.activePanel === 'SOURCE_MODEL' && (
                         <Tag color="green-inverse" style={{ fontSize: 19, padding: '5px 10px 5px 10px', width: 200 }}>
-                            <MenuFoldOutlined style={{ marginRight: 5 }} />Source Model
+                            <CaretRightOutlined style={{ marginRight: 5 }} />From Model
                         </Tag>)}
                     {props.activePanel === 'PATH_MAPPER' && (
                         <Tag color="blue-inverse" style={{ fontSize: 19, padding: '5px 10px 5px 10px', width: 200 }}>
@@ -144,7 +144,7 @@ const SmartModelControl: React.FC<ISmartModelControlProps> = (props) => {
                         </Tag>)}
                     {props.activePanel === 'DESTINATION_MODEL' && (
                         <Tag color="pink-inverse" style={{ fontSize: 19, padding: '5px 10px 5px 10px', width: 200 }}>
-                            <MenuFoldOutlined style={{ marginRight: 5 }} />Destination Model
+                            <CaretLeftOutlined style={{ marginRight: 5 }} />To Model
                         </Tag>)}
                     {props.activePanel === PanelTypes.NONE && (
                         <Tag color="lime-inverse" style={{ fontSize: 19, padding: '5px 10px 5px 10px', width: 200 }}>

@@ -1,4 +1,5 @@
-import { List } from "antd";
+import { RightCircleOutlined } from '@ant-design/icons';
+import { Flex, List } from "antd";
 import { flatten } from "flat";
 import _, { cloneDeep } from "lodash";
 import React from "react";
@@ -434,21 +435,41 @@ const SmartModelVisualizer: React.FC<SmartModelVisualizerProps<IInputModelTree>>
         outline: "none",
         display: "flex",
         flexDirection: "column",
-        width: "40%",
+        height: "100%",
+        position: 'relative'
       }} // Remove default focus outline
     >
+      <Flex
+        style={{
+          height: 40,
+          color: '#0f6fac',
+          textAlign: 'left',
+          paddingLeft: 10,
+          lineHeight: 2.7,
+          fontWeight: 'bold',
+          boxShadow: 'rgba(15, 111, 172, 0.4) 0px 2px 5px 2px',
+          marginBottom: 10,
+          borderWidth: '0px 0px 0px 5px',
+          borderStyle: 'solid',
+          borderColor: 'rgb(15, 111, 172)'
+        }}>
 
+        {PanelTypes.SOURCE_MODEL === props.panelType ? <h4><RightCircleOutlined style={{ marginRight: 10 }} /> From Model</h4> : <></>}
+        {PanelTypes.DESTINATION_MODEL === props.panelType ? <h4><RightCircleOutlined style={{ marginRight: 10 }} />To Model</h4> : <></>}
+      </Flex>
       <List
         style={{
-          border: "2px solid #0f6fac",
           width: "100%",
-          height: 1000,
+          height: '100%',
+          boxShadow: '0px 5px 5px 5px rgba(15, 111, 172, 0.4)',
           overflow: "scroll",
+          // borderRight: '2px solid #0f6fac',
+          borderLeft: '5px solid #0f6fac'
         }}
         dataSource={state}
         renderItem={renderItem}
       />
-    </div>
+    </div >
   );
 };
 

@@ -6,7 +6,7 @@ const LineNo: React.FC<ILineNo> = (props) => {
     <div
       className="item-level-wrapper"
       style={{
-        width: 20,
+        width: 30,
         height: "inherit",
         backgroundColor: "#0f6fac",
         color: "white",

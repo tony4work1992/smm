@@ -6,7 +6,7 @@ const ItemLevelAtom: React.FC<ILevelObject> = (props) => {
     <div
       className="item-level-wrapper"
       style={{
-        width: 20,
+        width: 30,
         backgroundColor: "rgb(68 160 219)",
         color: "white",
         padding: "0px 5px",

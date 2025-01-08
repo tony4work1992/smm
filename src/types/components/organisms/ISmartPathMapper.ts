@@ -16,6 +16,7 @@ export interface SmartPathMapperProps {
     setActivePanel: React.Dispatch<React.SetStateAction<PanelTypes>>;
     toModel: IInputModelTree[];
     data: IPathMapperData[];
+    height?: number;
     onPathUpdate: (data: IPathMapperData[]) => void;
 }
 

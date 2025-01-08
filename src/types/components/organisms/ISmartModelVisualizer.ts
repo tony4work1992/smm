@@ -12,6 +12,7 @@ export interface IData {
 export interface SmartModelVisualizerProps<T> {
     data: IData;
     panelType: PanelTypes;
+    height?: number;
     setActivePanel: React.Dispatch<React.SetStateAction<PanelTypes>>;
     onModelChange?: (params: {
         item: T;

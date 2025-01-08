@@ -13,15 +13,29 @@ const SmartModelMapper: React.FC<SmartModelMapperProps> = (props) => {
   const [toModel, setToModel] = React.useState<IInputModelTree[]>([]);
 
   const [activePanel, setActivePanel] = React.useState<PanelTypes>(PanelTypes.NONE)
-
+  let customStyle = {};
+  if (props.wrapperBorder) {
+    customStyle = { border: '2px solid #4848d3' }
+  }
+  const { width, marginLeft, marginRight } = props
+  if (width) {
+    customStyle = { ...customStyle, width };
+  }
+  if (marginLeft) {
+    customStyle = { ...customStyle, marginLeft };
+  }
+  if (marginRight) {
+    customStyle = { ...customStyle, marginRight };
+  }
   return (
-    <Flex vertical style={{ padding: 10, border: '2px solid #4848d3', borderRadius: 5, height: 900 }}>
+    <Flex vertical style={{ padding: 10, borderRadius: 5, ...customStyle }}>
       <SmartModelControl activePanel={activePanel} />
-      <Splitter layout='horizontal' style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', height: '100%' }}>
+      <Splitter layout='horizontal' style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', height: '100%' }} >
         <Splitter.Panel>
           <SmartModelVisualizer
             data={props.from}
             panelType={PanelTypes.SOURCE_MODEL}
+            height={props.height}
             setActivePanel={setActivePanel}
             onModelChange={(params) => {
               setFromModel(params.data);
@@ -33,6 +47,7 @@ const SmartModelMapper: React.FC<SmartModelMapperProps> = (props) => {
             data={props.mapping}
             fromModel={fromModel}
             toModel={toModel}
+            height={props.height}
             panelType={PanelTypes.PATH_MAPPER}
             setActivePanel={setActivePanel}
             onPathUpdate={(data: IPathMapperData[]) => {
@@ -53,7 +68,6 @@ const SmartModelMapper: React.FC<SmartModelMapperProps> = (props) => {
           />
         </Splitter.Panel>
       </Splitter>
-
     </Flex>
   );
 };

@@ -1,5 +1,4 @@
-import { SwapOutlined } from '@ant-design/icons';
-import { Flex, List } from "antd";
+import { List } from "antd";
 import * as _ from 'lodash';
 import React from "react";
 import { useClickAway } from 'react-use';
@@ -96,33 +95,17 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
       }}
       style={{ display: "flex", flexDirection: "column", position: 'relative', height: '100%' }}
     >
-      <Flex style={{
-        height: 40,
-        color: '#0f6fac',
-        textAlign: 'left',
-        paddingLeft: 10,
-        lineHeight: 2.7,
-        fontWeight: 'bold',
-        boxShadow: 'rgba(15, 111, 172, 0.4) 0px 2px 5px 2px',
-        marginBottom: 10,
-        marginLeft: '2%',
-        marginRight: '2%',
-        width: '96%',
-        borderWidth: '0px 0px 0px 5px',
-        borderStyle: 'solid',
-        borderColor: 'rgb(15, 111, 172)'
-      }}><SwapOutlined style={{ marginRight: 10 }} />Path Mapping</Flex>
 
       <List
         style={{
-          height: '100%',
+          height: (props.height && props.height > 160) ? props.height - 80 : '100%',
           marginLeft: '2%',
           marginRight: '2%',
           width: '96%',
           overflow: "scroll",
           // borderRight: '2px solid #0f6fac',
           boxShadow: '0px 5px 5px 5px rgba(15, 111, 172, 0.4)',
-          borderLeft: '5px solid #0f6fac'
+          borderTop: '5px solid #0f6fac'
         }}
         dataSource={state}
         renderItem={(item, index) => {

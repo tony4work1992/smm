@@ -288,10 +288,10 @@ const SmartModelControl: React.FC<ISmartModelControlProps> = (props) => {
                 </Flex>
             </Flex>
             <Flex gap={5} justify='flex-end' style={{ width: '100%' }}>
-                <Button title="Escape" color='primary' variant='outlined' style={{ width: 150 }}>
+                <Button title="Escape" color='primary' variant='outlined' style={{ width: 120 }}>
                     <CloseCircleFilled style={{ marginRight: 5 }} />Discard
                 </Button>
-                <Button title="Enter" color='primary' variant='solid' style={{ width: 150 }}>
+                <Button title="Enter" color='primary' variant='solid' style={{ width: 120 }}>
                     <SaveOutlined style={{ marginRight: 5 }} />Save
                 </Button>
             </Flex>

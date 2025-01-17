@@ -1,10 +1,15 @@
 import { List } from "antd";
-import * as _ from 'lodash';
+import * as _ from "lodash";
 import React from "react";
-import { useClickAway } from 'react-use';
-import { PanelTypes } from '../../../@constants/panels/PanelTypes';
+import { useClickAway } from "react-use";
+import { PanelTypes } from "../../../@constants/panels/PanelTypes";
 import { usePathOptionsManager } from "../../../hooks/usePathMapper/usePathOptionsManager";
-import { IPathMapperData, IPathSelectProps, SmartPathMapperProps } from "../../../types";
+import {
+  IPathMapperData,
+  IPathSelectProps,
+  PathSelectStatus,
+  SmartPathMapperProps,
+} from "../../../types";
 import FieldPathMolecule from "../../molecules/field-path";
 
 // CSS Properties
@@ -16,15 +21,6 @@ const itemListStyle: React.CSSProperties = {
   fontWeight: "bold",
 };
 
-const defaultData: IPathMapperData = {
-  from: {
-    fPath: ""
-  },
-  to: {
-    fPath: ""
-  }
-}
-
 const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
   const [state, setState] = React.useState<IPathMapperData[]>([]);
   // Set field to be select
@@ -34,12 +30,11 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
   const pathOptionsManager = usePathOptionsManager();
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-
   useClickAway(containerRef, () => {
     if (!selectedField) {
       return;
     }
-    props.setActivePanel(PanelTypes.NONE)
+    props.setActivePanel(PanelTypes.NONE);
     setSelectedField(undefined);
   });
 
@@ -59,9 +54,20 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
   }, [JSON.stringify(props.fromModel), JSON.stringify(props.toModel)]);
 
   const onDelete = (params: IPathMapperData) => {
+    const defaultField: IPathMapperData = {
+      from: {
+        fPath: "",
+        status: PathSelectStatus.ERROR,
+      },
+      to: {
+        fPath: "",
+        status: PathSelectStatus.ERROR,
+      },
+    };
+
     // 1. Length <= 1 -> set to default data
     if (state.length <= 1) {
-      setState([defaultData]);
+      setState([defaultField]);
       return;
     }
 
@@ -71,13 +77,81 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
     if (index > -1) {
       const newState = state;
       state.splice(index, 1);
-      setState(newState)
+      setState(newState);
     }
-  }
+  };
 
   const addNewPathMapping = () => {
-    const newState = [...state, defaultData];
+    const emptyPaths = state.filter((item) => {
+      if (item.from.status === PathSelectStatus.ERROR || item.to.status === PathSelectStatus.ERROR) {
+        return item;
+      }
+    });
+
+    if (emptyPaths.length > 0) {
+      return;
+    }
+
+    const newState = [
+      ...state,
+      {
+        from: { fPath: "", status: PathSelectStatus.ERROR },
+        to: { fPath: "", status: PathSelectStatus.ERROR },
+      },
+    ];
+    setState(newState);
+  };
+
+  /**
+   * Logic when the path changed 
+   * @param item IPathMapperData - path data mapped together from both model
+   * @param fPath string - the value of the path changed
+   * @param isFromModel boolean - check if the path source is from or to model
+   * @returns 
+   */
+  const onPathChanged = (item: IPathMapperData, fPath: string, isFromModel: boolean) => {
+    let newStatus = PathSelectStatus.OK;
+    // If the field path is not selected yet
+    if (_.isNil(fPath) || fPath === "") {
+      newStatus = PathSelectStatus.ERROR
+    }
+
+    // If the field path is selected, check if duplicated or not
+    const index = _.indexOf(state, item);
+    const newState = [ ...state ];
+
+    if (isFromModel) {
+      const duplicatePaths = newState.filter((mappedPath) => {
+        if (mappedPath.from.fPath === fPath) {
+          return mappedPath;
+        }
+      })
+
+      if (duplicatePaths.length > 0) {
+        newStatus = PathSelectStatus.ERROR;
+      }
+
+      newState[index].from.fPath = fPath;
+      newState[index].from.status = newStatus;
+      setState(newState)
+      addNewPathMapping();
+      return;
+    }
+
+    const duplicatePaths = newState.filter((mappedPath) => {
+      if (mappedPath.to.fPath === fPath) {
+        return mappedPath;
+      }
+    })
+
+    if (duplicatePaths.length > 0) {
+      newStatus = PathSelectStatus.ERROR;
+    }
+
+    newState[index].to.fPath = fPath;
+    newState[index].to.status = newStatus;
     setState(newState)
+    addNewPathMapping();
   }
 
   return (
@@ -89,23 +163,33 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
       onFocus={() => props.setActivePanel(props.panelType)}
       onKeyUp={(e) => {
         if (e.altKey && e.code === "Equal") {
-          e.preventDefault()
+          e.preventDefault();
           addNewPathMapping();
         }
-      }}
-      style={{ display: "flex", flexDirection: "column", position: 'relative', height: '100%' }}
-    >
 
+        if (e.altKey && selectedField && e.code === "Minus") {
+          e.preventDefault();
+          onDelete(selectedField);
+        }
+      }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+        height: "100%",
+      }}
+    >
       <List
         style={{
-          height: (props.height && props.height > 160) ? props.height - 80 : '100%',
-          marginLeft: '2%',
-          marginRight: '2%',
-          width: '96%',
+          height:
+            props.height && props.height > 160 ? props.height - 80 : "100%",
+          marginLeft: "2%",
+          marginRight: "2%",
+          width: "96%",
           overflow: "scroll",
           // borderRight: '2px solid #0f6fac',
-          boxShadow: '0px 5px 5px 5px rgba(15, 111, 172, 0.4)',
-          borderTop: '5px solid #0f6fac'
+          boxShadow: "0px 5px 5px 5px rgba(15, 111, 172, 0.4)",
+          borderTop: "5px solid #0f6fac",
         }}
         dataSource={state}
         renderItem={(item, index) => {
@@ -122,38 +206,34 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
               style={itemListStyle}
               key={`${item.from.fPath}${item.to.fPath}`}
               onClick={() => {
-                setSelectedField({ ...item })
+                setSelectedField({ ...item });
               }}
               onBlur={() => {
-                setSelectedField(undefined)
+                setSelectedField(undefined);
               }}
               onMouseEnter={() => {
-                setSelectingField({ ...item })
+                setSelectingField({ ...item });
               }}
               onMouseLeave={() => {
-                setSelectingField(undefined)
+                setSelectingField(undefined);
               }}
             >
               <FieldPathMolecule
                 index={index}
                 isSelecting={
-                  (item.from.fPath === selectingField?.from.fPath && item.to.fPath === selectingField?.to.fPath) ||
-                  (item.from.fPath === selectedField?.from.fPath && item.to.fPath === selectedField?.to.fPath)
+                  (item.from.fPath === selectingField?.from.fPath &&
+                    item.to.fPath === selectingField?.to.fPath) ||
+                  (item.from.fPath === selectedField?.from.fPath &&
+                    item.to.fPath === selectedField?.to.fPath)
                 }
-                delete={() => { onDelete(item) }}
+                delete={() => {
+                  onDelete(item);
+                }}
                 fromModel={{
                   ...fromPathModel,
                   events: {
                     onChange: (params) => {
-                      const newState = state.map(mappedPath => {
-                        if (item.from.fPath === mappedPath.from.fPath) {
-                          mappedPath.from.fPath = params.fPath;
-                        }
-
-                        return mappedPath;
-                      })
-                      console.log('newState', newState)
-                      setState(newState);
+                      onPathChanged(item, params.fPath, true);
                     },
                     onSearch: () => { },
                   },
@@ -162,15 +242,7 @@ const SmartPathMapper: React.FC<SmartPathMapperProps> = (props) => {
                   ...toPathModel,
                   events: {
                     onChange: (params) => {
-                      const newState = state.map(mappedPath => {
-                        if (item.to.fPath === mappedPath.to.fPath) {
-                          mappedPath.to.fPath = params.fPath;
-                        }
-
-                        return mappedPath;
-                      })
-
-                      setState(newState);
+                      onPathChanged(item, params.fPath, false);
                     },
                     onSearch: () => { },
                   },

@@ -2,16 +2,19 @@ import { Select } from "antd";
 import React from "react";
 import { IPathSelectProps } from "../../../types/components/atoms/IPathSelectProps";
 
-const pathSelectStyle: React.CSSProperties = { width: "100%", textAlign: "left" };
+const pathSelectStyle: React.CSSProperties = {
+  width: "100%",
+  textAlign: "left"
+};
 
 const PathSelectAtom: React.FC<IPathSelectProps> = (props) => {
-  // console.log('::::', props.options);
   return (
     <Select
       style={{ ...pathSelectStyle }}
       size="small"
-      variant="borderless"
+      variant="outlined"
       popupMatchSelectWidth={false}
+      status={props.status}
       showSearch
       // defaultValue={props.fPath}
       value={props.fPath}

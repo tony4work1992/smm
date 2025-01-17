@@ -6,6 +6,7 @@ const ItemLevelAtom: React.FC<ILevelObject> = (props) => {
     <div
       className="item-level-wrapper"
       style={{
+        height: "inherit",
         width: 30,
         backgroundColor: "rgb(68 160 219)",
         color: "white",

@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./SmartModelMapper.tsx";
+import { PathSelectStatus } from "./lib/main.ts";
 
 const data = {
   user: {
@@ -119,10 +120,13 @@ const data = {
 // Mapped paths for from and to model
 const mappedPaths = [
   {
-    from: { fPath: "user.personal.name" },
-    to: { fPath: "user.personal.name" },
+    from: { fPath: "user.personal.name", status: PathSelectStatus.OK },
+    to: { fPath: "user.personal.name", status: PathSelectStatus.OK },
   },
-  { from: { fPath: "user.personal.age" }, to: { fPath: "user.personal.age" } },
+  {
+    from: { fPath: "user.personal.age", status: PathSelectStatus.OK },
+    to: { fPath: "user.personal.age", status: PathSelectStatus.OK },
+  },
 ];
 
 createRoot(document.getElementById("root")!).render(

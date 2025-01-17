@@ -21,9 +21,9 @@ const DeleteButton: React.FC<IDeleteButtonProps> = (props) => {
         style={{
           // background: 'red',
           // border: '1px dashed red',
-          background: 'red',
-          border: '2px solid red',
-          color: 'white',
+          background: "red",
+          border: "2px solid red",
+          color: "white",
           height: 26,
           borderRadius: 0,
           position: "absolute",

@@ -1,5 +1,6 @@
 export interface IPathSelectProps {
   fPath: string;
+  status: PathSelectStatus;
   options: PathSelectOption[];
   events: {
     onChange: (params: { fPath: string }) => void;
@@ -10,4 +11,9 @@ export interface IPathSelectProps {
 export interface PathSelectOption {
   value: string;
   label: string;
+}
+
+export enum PathSelectStatus {
+  OK = "",
+  ERROR = "error"
 }

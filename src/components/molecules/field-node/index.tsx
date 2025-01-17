@@ -12,7 +12,7 @@ import LineNo from "../../atoms/line-no";
 
 const FieldNodeMolecules: React.FC<FieldNodeProps> = (props) => {
   return (
-    <Flex gap="0px 0px" wrap={false}>
+    <Flex gap="0px 0px" wrap={false} style={{ height: props.height }}>
       <LineNo {...props} />
       <ItemLevelAtom {...props} />
       <IndentBlockAtom {...props} />

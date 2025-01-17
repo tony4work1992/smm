@@ -4,10 +4,11 @@ import {
   FieldNameViewProps,
 } from "../atoms/FieldNameProps";
 import { IDataTypeProps } from "../atoms/IDataTypeProps";
-import { DefaultValueViewProps } from '../atoms/IDefaultValueProps';
+import { DefaultValueViewProps } from "../atoms/IDefaultValueProps";
 import { IDeleteButtonProps } from "../atoms/IDeleteButtonProps";
 
 export type FieldNodeProps = {
+  height: number;
   isFieldEdit?: boolean;
   isDefaultValueEdit?: boolean;
   selected: ILevelObject;

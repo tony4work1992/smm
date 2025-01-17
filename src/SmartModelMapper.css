@@ -30,9 +30,24 @@
   }
 }
 
+/** CSS properties for settings's cog icon */
+@keyframes cog-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(180deg);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
+  }
+
+  .cog-active {
+    animation: cog-spin 1s ease-in-out;
   }
 }
 
